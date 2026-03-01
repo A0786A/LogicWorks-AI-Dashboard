@@ -550,7 +550,7 @@
         </div>
         <div class="quick-stats">
             <div class="quick-stat"><div class="value">8</div><div class="label">Agents</div></div>
-            <div class="quick-stat"><div class="value">2</div><div class="label">Projects</div></div>
+            <div class="quick-stat"><div class="value">3</div><div class="label">Projects</div></div>
             <div class="quick-stat"><div class="value">12</div><div class="label">Tasks</div></div>
             <div class="quick-stat"><div class="value">156K</div><div class="label">Tokens</div></div>
         </div>
@@ -568,7 +568,7 @@
         <div class="section">
             <div class="section-header">
                 <div class="section-title"><span class="icon">📁</span> Projects</div>
-                <span class="badge">2 Active</span>
+                <span class="badge">3 Active</span>
             </div>
             <div class="project-list" id="projectList"></div>
         </div>
@@ -670,12 +670,25 @@
                 tasks: [
                     { name: 'Client brief created', status: 'completed', time: 'Feb 26', files: [{ name: 'client-brief.md', size: '6KB' }] },
                     { name: '6 landing pages written', status: 'completed', time: 'Feb 26', files: [{ name: 'wave1-landing-pages.md', size: '21KB' }] },
-                    { name: 'Competitor analysis', status: 'completed', time: 'Feb 26', files: [{ name: 'tiktech-analysis.md', size: '16KB' }] },
                     { name: 'Wave 2 planning', status: 'pending', time: 'Next' }
                 ]
             },
             {
                 id: 2,
+                name: 'AZ Tech Services SEO',
+                client: 'Computer Repair - Ashburn, VA',
+                progress: 60,
+                status: 'In Progress',
+                tasks: [
+                    { name: 'Initial audit completed', status: 'completed', time: 'Feb 26' },
+                    { name: 'Competitor analysis - TikTech', status: 'completed', time: 'Feb 26', files: [{ name: 'tiktech-analysis.md', size: '16KB' }] },
+                    { name: 'Local SEO strategy', status: 'completed', time: 'Feb 27', files: [{ name: 'local-seo-strategy.md', size: '12KB' }] },
+                    { name: 'Content plan development', status: 'pending', time: 'Next' },
+                    { name: 'Website optimization', status: 'pending', time: 'Next' }
+                ]
+            },
+            {
+                id: 3,
                 name: 'AZ Tech SEO Team',
                 client: 'Internal - SEO Agency Build',
                 progress: 85,
@@ -811,7 +824,56 @@ TikTech Services is a local computer repair business in Ashburn, VA.
 - Expand local keyword targeting
 - Increase review volume
 - Add pricing content
-- Launch video content strategy`
+- Launch video content strategy`,
+
+            'local-seo-strategy': `# AZ Tech Services Local SEO Domination Strategy
+
+## Google Business Profile Optimization
+
+### Phase 1: Foundation (Week 1-2)
+- [ ] Verify primary category: "Computer Repair Service"
+- [ ] Add all service categories
+- [ ] Optimize business description with keywords
+- [ ] Upload 20+ photos
+- [ ] Add Q&A section
+
+### Phase 2: Engagement (Week 3-4)
+- [ ] Post weekly updates
+- [ ] Respond to all reviews
+- [ ] Add services list
+- [ ] Set up booking button
+
+## Citation Building Plan
+
+**Tier 1 - Essential:**
+- Google Business Profile
+- Apple Maps
+- Bing Places
+- Yelp
+- Facebook
+- Nextdoor
+
+**Tier 2 - Data Aggregators:**
+- Data Axle
+- Neustar/Localeze
+- Foursquare
+
+## Review Generation Strategy
+
+**Target: 50+ reviews in 6 months**
+
+**Tactics:**
+1. In-person request after service
+2. QR code on receipts
+3. SMS follow-up 24h after service
+4. Email campaign for past customers
+
+## Location Pages to Create
+
+1. Computer Repair Sterling VA
+2. Laptop Repair Leesburg VA
+3. PC Repair Chantilly VA
+4. MacBook Repair Reston VA`
         };
 
         let currentFileContent = '';
