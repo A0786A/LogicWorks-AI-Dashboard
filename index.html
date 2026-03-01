@@ -4,529 +4,519 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>LogicWorks.AI SEO Agents</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0a0f1a;
-            color: #e2e8f0;
-            line-height: 1.5;
-            padding-bottom: 80px;
+        :root {
+            --bg-primary: #0a0f1a;
+            --bg-secondary: #131b2a;
+            --bg-card: #0f1724;
+            --border: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-blue: #3b82f6;
+            --accent-green: #22c55e;
+            --accent-purple: #8b5cf6;
+            --accent-cyan: #06b6d4;
+            --accent-amber: #f59e0b;
+            --accent-red: #ef4444;
+            --accent-pink: #ec4899;
+            --accent-indigo: #6366f1;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
-        
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding-bottom: 100px;
+        }
+
         .header {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            padding: 1rem;
-            border-bottom: 1px solid #334155;
+            background: linear-gradient(180deg, rgba(30,41,59,0.8) 0%, rgba(15,23,36,0.95) 100%);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 1.25rem 1rem;
             position: sticky;
             top: 0;
             z-index: 100;
         }
-        
+
         .header-top {
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-        
-        .header h1 {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #f8fafc;
-        }
-        
-        .status-badge {
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            font-size: 0.7rem;
-            color: #22c55e;
-            background: rgba(34, 197, 94, 0.1);
-            padding: 0.2rem 0.5rem;
-            border-radius: 20px;
-        }
-        
-        .status-dot {
-            width: 6px;
-            height: 6px;
-            background: #22c55e;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
-        }
-        
-        .container { padding: 0.75rem; }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 0.6rem;
-            margin-bottom: 1rem;
-        }
-        
-        .stat-card {
-            background: #131b2a;
-            border: 1px solid #1e293b;
-            border-radius: 12px;
-            padding: 1rem;
-            text-align: center;
-        }
-        
-        .stat-card .label {
-            font-size: 0.65rem;
-            text-transform: uppercase;
-            color: #64748b;
-            margin-bottom: 0.3rem;
-        }
-        
-        .stat-card .value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #f8fafc;
-        }
-        
-        .section {
-            background: #131b2a;
-            border: 1px solid #1e293b;
-            border-radius: 12px;
             margin-bottom: 0.75rem;
-            overflow: hidden;
         }
-        
-        .section-header {
-            padding: 0.875rem 1rem;
-            border-bottom: 1px solid #1e293b;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .section-header h2 {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #f8fafc;
-        }
-        
-        .section-header .count {
-            font-size: 0.75rem;
-            color: #64748b;
-            background: #1e293b;
-            padding: 0.2rem 0.5rem;
-            border-radius: 10px;
-        }
-        
-        .agent-list { padding: 0.5rem; }
-        
-        .agent-item {
+
+        .brand {
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            padding: 0.75rem;
-            border-radius: 8px;
-            margin-bottom: 0.5rem;
-            background: #0f1724;
-            border: 1px solid #1e293b;
-            cursor: pointer;
-            transition: all 0.2s;
         }
-        
-        .agent-item:active {
-            transform: scale(0.98);
-            background: #1e293b;
-        }
-        
-        .agent-item:last-child { margin-bottom: 0; }
-        
-        .agent-avatar {
+
+        .brand-icon {
             width: 40px;
             height: 40px;
-            border-radius: 8px;
+            background: var(--gradient-1);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 600;
+            font-size: 1.25rem;
+        }
+
+        .brand-text h1 {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .brand-text p {
             font-size: 0.75rem;
-            flex-shrink: 0;
+            color: var(--text-muted);
         }
-        
-        .agent-avatar.coordinator { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
-        .agent-avatar.researcher { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
-        .agent-avatar.content { background: linear-gradient(135deg, #06b6d4, #0891b2); }
-        .agent-avatar.local { background: linear-gradient(135deg, #f59e0b, #d97706); }
-        .agent-avatar.technical { background: linear-gradient(135deg, #ef4444, #dc2626); }
-        .agent-avatar.analytics { background: linear-gradient(135deg, #22c55e, #16a34a); }
-        .agent-avatar.link { background: linear-gradient(135deg, #ec4899, #db2777); }
-        .agent-avatar.ecommerce { background: linear-gradient(135deg, #6366f1, #4f46e5); }
-        
-        .agent-info { flex: 1; min-width: 0; }
-        
-        .agent-info h3 {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #f8fafc;
-            margin-bottom: 0.15rem;
-        }
-        
-        .agent-info .role {
-            font-size: 0.7rem;
-            color: #64748b;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        
-        .agent-status {
-            text-align: right;
-        }
-        
-        .agent-status .badge {
-            display: inline-block;
-            padding: 0.2rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.65rem;
+
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            padding: 0.4rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
             font-weight: 500;
+            color: var(--accent-green);
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+        }
+
+        .quick-stat {
+            text-align: center;
+            padding: 0.5rem;
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+        }
+
+        .quick-stat .value {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .quick-stat .label {
+            font-size: 0.6rem;
+            color: var(--text-muted);
             text-transform: uppercase;
         }
-        
-        .badge.idle { background: #1e293b; color: #94a3b8; }
-        .badge.active { background: rgba(34, 197, 94, 0.15); color: #22c55e; }
-        .badge.busy { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
-        
-        .agent-status .meta {
-            font-size: 0.65rem;
-            color: #475569;
-            margin-top: 0.2rem;
+
+        .container { padding: 1rem; }
+        .section { margin-bottom: 1.5rem; }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
         }
-        
-        .project-list { padding: 0.5rem; }
-        
-        .project-item {
-            background: #0f1724;
-            border: 1px solid #1e293b;
-            border-radius: 8px;
-            padding: 0.875rem;
-            margin-bottom: 0.5rem;
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .badge {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            padding: 0.25rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+        }
+
+        .agents-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+        }
+
+        .agent-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .agent-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--agent-color);
+        }
+
+        .agent-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            background: var(--agent-bg);
+            box-shadow: 0 4px 15px -3px var(--agent-bg);
+        }
+
+        .agent-card h3 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .agent-card .role {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .agent-stats {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .agent-stat {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+        }
+
+        .agent-card[data-agent="coordinator"] { --agent-color: var(--accent-blue); --agent-bg: rgba(59, 130, 246, 0.2); }
+        .agent-card[data-agent="researcher"] { --agent-color: var(--accent-purple); --agent-bg: rgba(139, 92, 246, 0.2); }
+        .agent-card[data-agent="content"] { --agent-color: var(--accent-cyan); --agent-bg: rgba(6, 182, 212, 0.2); }
+        .agent-card[data-agent="local"] { --agent-color: var(--accent-amber); --agent-bg: rgba(245, 158, 11, 0.2); }
+        .agent-card[data-agent="technical"] { --agent-color: var(--accent-red); --agent-bg: rgba(239, 68, 68, 0.2); }
+        .agent-card[data-agent="analytics"] { --agent-color: var(--accent-green); --agent-bg: rgba(34, 197, 94, 0.2); }
+        .agent-card[data-agent="link"] { --agent-color: var(--accent-pink); --agent-bg: rgba(236, 72, 153, 0.2); }
+        .agent-card[data-agent="ecommerce"] { --agent-color: var(--accent-indigo); --agent-bg: rgba(99, 102, 241, 0.2); }
+
+        .project-list { display: flex; flex-direction: column; gap: 0.75rem; }
+
+        .project-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1rem;
             cursor: pointer;
             transition: all 0.2s;
         }
-        
-        .project-item:active {
-            transform: scale(0.98);
-            background: #1e293b;
-        }
-        
-        .project-item:last-child { margin-bottom: 0; }
-        
+
+        .project-card:hover { border-color: var(--border-light); }
+
         .project-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
             margin-bottom: 0.5rem;
         }
-        
+
         .project-header h4 {
-            font-size: 0.85rem;
+            font-size: 0.95rem;
             font-weight: 600;
-            color: #f8fafc;
             flex: 1;
         }
-        
-        .project-header .pct {
-            font-size: 0.9rem;
+
+        .project-progress { text-align: right; }
+        .project-progress .pct {
+            font-size: 1.25rem;
             font-weight: 700;
-            color: #3b82f6;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        
+
         .project-meta {
-            font-size: 0.75rem;
-            color: #64748b;
-            margin-bottom: 0.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
         }
-        
+
+        .project-tag {
+            font-size: 0.65rem;
+            padding: 0.2rem 0.5rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 4px;
+            color: var(--text-secondary);
+        }
+
         .progress-bar {
-            height: 4px;
-            background: #1e293b;
-            border-radius: 2px;
+            height: 6px;
+            background: var(--bg-secondary);
+            border-radius: 3px;
             overflow: hidden;
         }
-        
+
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #3b82f6, #22c55e);
-            border-radius: 2px;
-            transition: width 0.3s;
+            background: var(--gradient-1);
+            border-radius: 3px;
         }
-        
-        /* Modal Styles */
+
         .modal {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.9);
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.8);
             z-index: 1000;
-            overflow-y: auto;
         }
-        
+
         .modal.active { display: block; }
-        
+
         .modal-content {
-            background: #1e293b;
+            background: var(--bg-secondary);
             min-height: 100vh;
             animation: slideUp 0.3s ease;
         }
-        
+
         @keyframes slideUp {
             from { transform: translateY(100%); }
             to { transform: translateY(0); }
         }
-        
+
         .modal-header {
-            padding: 1rem;
-            border-bottom: 1px solid #334155;
+            padding: 1.25rem;
+            border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: sticky;
             top: 0;
-            background: #1e293b;
+            background: var(--bg-secondary);
             z-index: 10;
         }
-        
-        .modal-header h3 {
-            font-size: 1rem;
-            color: #f8fafc;
-        }
-        
+
         .modal-close {
-            background: none;
+            background: rgba(255,255,255,0.1);
             border: none;
-            color: #64748b;
-            font-size: 1.5rem;
+            color: var(--text-secondary);
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            font-size: 1.25rem;
             cursor: pointer;
-            padding: 0.25rem;
         }
-        
-        .modal-body {
-            padding: 1rem;
-        }
-        
-        .detail-row {
-            margin-bottom: 1rem;
-        }
-        
-        .detail-row:last-child {
-            margin-bottom: 0;
-        }
-        
+
+        .modal-body { padding: 1.25rem; }
+
         .detail-label {
-            font-size: 0.75rem;
-            color: #64748b;
+            font-size: 0.7rem;
+            color: var(--text-muted);
             text-transform: uppercase;
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.5rem;
         }
-        
-        .detail-value {
-            font-size: 0.9rem;
-            color: #f8fafc;
-            line-height: 1.5;
-        }
-        
-        .task-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-        
+
+        .task-list { display: flex; flex-direction: column; gap: 0.75rem; }
+
         .task-item {
-            background: #0f1724;
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 1rem;
+            border-left: 3px solid var(--accent-green);
+        }
+
+        .task-item.pending { border-left-color: var(--accent-amber); }
+
+        .task-name { font-size: 0.9rem; font-weight: 500; }
+        .task-meta { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem; }
+
+        .file-list { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.75rem; }
+
+        .file-item {
+            background: rgba(255,255,255,0.03);
             padding: 0.75rem;
             border-radius: 8px;
-            border-left: 3px solid #22c55e;
-        }
-        
-        .task-item.pending {
-            border-left-color: #f59e0b;
-        }
-        
-        .task-name {
-            font-size: 0.85rem;
-            color: #f8fafc;
-            margin-bottom: 0.25rem;
-        }
-        
-        .task-meta {
-            font-size: 0.7rem;
-            color: #64748b;
-        }
-        
-        .file-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            margin-top: 0.75rem;
-        }
-        
-        .file-item {
-            background: #0a0f1a;
-            padding: 0.75rem;
-            border-radius: 6px;
             cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .file-item:active {
-            background: #1e293b;
-        }
-        
-        .file-header {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 0.25rem;
+            gap: 0.75rem;
         }
-        
-        .file-name {
-            font-size: 0.8rem;
-            color: #3b82f6;
-            font-weight: 500;
+
+        .file-item:hover { background: rgba(255,255,255,0.06); }
+
+        .file-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        
-        .file-size {
-            font-size: 0.7rem;
-            color: #64748b;
-        }
-        
-        .file-hint {
-            font-size: 0.7rem;
-            color: #64748b;
-        }
-        
-        /* File Content Viewer */
+
+        .file-info { flex: 1; }
+        .file-name { font-size: 0.8rem; font-weight: 500; }
+        .file-size { font-size: 0.7rem; color: var(--text-muted); }
+
         .file-viewer {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: #0a0f1a;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--bg-primary);
             z-index: 2000;
             overflow-y: auto;
         }
-        
+
         .file-viewer.active { display: block; }
-        
+
         .file-viewer-header {
-            padding: 1rem;
-            border-bottom: 1px solid #334155;
+            padding: 1.25rem;
+            border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: sticky;
             top: 0;
-            background: #1e293b;
-            z-index: 10;
+            background: var(--bg-secondary);
         }
-        
-        .file-viewer-header h3 {
-            font-size: 0.9rem;
-            color: #f8fafc;
-        }
-        
-        .file-viewer-body {
-            padding: 1rem;
-        }
-        
+
         .file-content {
-            background: #0f1724;
-            padding: 1rem;
-            border-radius: 8px;
+            background: var(--bg-card);
+            padding: 1.25rem;
+            border-radius: 12px;
             font-family: monospace;
-            font-size: 0.75rem;
-            line-height: 1.6;
-            color: #e2e8f0;
+            font-size: 0.8rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
             white-space: pre-wrap;
             word-break: break-word;
-            max-height: 70vh;
+            max-height: 60vh;
             overflow-y: auto;
         }
-        
-        .copy-btn {
-            background: #3b82f6;
-            color: #fff;
+
+        .btn-primary {
+            background: var(--accent-blue);
+            color: white;
             border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            font-size: 0.8rem;
+            padding: 0.875rem 1.5rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
             cursor: pointer;
+            width: 100%;
             margin-top: 1rem;
         }
-        
-        .copy-btn:active {
-            background: #2563eb;
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(19, 27, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--border);
+            padding: 0.75rem;
+            display: flex;
+            justify-content: space-around;
+            z-index: 100;
         }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.5rem 1rem;
+            color: var(--text-muted);
+            font-size: 0.65rem;
+            cursor: pointer;
+        }
+
+        .nav-item.active { color: var(--accent-blue); }
+        .nav-item .icon { font-size: 1.25rem; }
     </style>
 </head>
 <body>
     <header class="header">
         <div class="header-top">
-            <h1>🔍 LogicWorks.AI SEO Agents</h1>
+            <div class="brand">
+                <div class="brand-icon">🎯</div>
+                <div class="brand-text">
+                    <h1>LogicWorks.AI</h1>
+                    <p>SEO Agent Team</p>
+                </div>
+            </div>
             <div class="status-badge">
                 <span class="status-dot"></span>
                 <span>Live</span>
             </div>
         </div>
+        <div class="quick-stats">
+            <div class="quick-stat"><div class="value">8</div><div class="label">Agents</div></div>
+            <div class="quick-stat"><div class="value">2</div><div class="label">Projects</div></div>
+            <div class="quick-stat"><div class="value">12</div><div class="label">Tasks</div></div>
+            <div class="quick-stat"><div class="value">156K</div><div class="label">Tokens</div></div>
+        </div>
     </header>
-    
+
     <div class="container">
-        <!-- Stats -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="label">Active Agents</div>
-                <div class="value">8</div>
-            </div>
-            <div class="stat-card">
-                <div class="label">Projects</div>
-                <div class="value">2</div>
-            </div>
-            <div class="stat-card">
-                <div class="label">Tasks Done</div>
-                <div class="value">12</div>
-            </div>
-            <div class="stat-card">
-                <div class="label">Tokens</div>
-                <div class="value">156K</div>
-            </div>
-        </div>
-        
-        <!-- Agents -->
         <div class="section">
             <div class="section-header">
-                <h2>🤖 Agent Team</h2>
-                <span class="count">8 active</span>
+                <div class="section-title"><span class="icon">🤖</span> Agent Team</div>
+                <span class="badge">8 Active</span>
             </div>
-            <div class="agent-list" id="agentList"></div>
+            <div class="agents-grid" id="agentList"></div>
         </div>
-        
-        <!-- Projects -->
+
         <div class="section">
             <div class="section-header">
-                <h2>📁 Projects</h2>
-                <span class="count">2 active</span>
+                <div class="section-title"><span class="icon">📁</span> Projects</div>
+                <span class="badge">2 Active</span>
             </div>
             <div class="project-list" id="projectList"></div>
         </div>
     </div>
-    
-    <!-- Modal -->
+
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="showTab('agents')">
+            <span class="icon">🤖</span>
+            <span>Agents</span>
+        </div>
+        <div class="nav-item" onclick="showTab('projects')">
+            <span class="icon">📁</span>
+            <span>Projects</span>
+        </div>
+        <div class="nav-item" onclick="showTab('analytics')">
+            <span class="icon">📊</span>
+            <span>Analytics</span>
+        </div>
+    </div>
+
     <div class="modal" id="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -536,319 +526,28 @@
             <div class="modal-body" id="modalBody"></div>
         </div>
     </div>
-    
-    <!-- File Viewer -->
+
     <div class="file-viewer" id="fileViewer">
         <div class="file-viewer-header">
-            <h3 id="fileViewerTitle">File Content</h3>
+            <h3 id="fileViewerTitle">File</h3>
             <button class="modal-close" onclick="closeFileViewer()">&times;</button>
         </div>
-        <div class="file-viewer-body">
+        <div class="modal-body">
             <div class="file-content" id="fileContent"></div>
-            <button class="copy-btn" onclick="copyFileContent()">Copy to Clipboard</button>
+            <button class="btn-primary" onclick="copyFileContent()">Copy to Clipboard</button>
         </div>
     </div>
 
     <script>
-        // Embedded file contents
-        const fileContents = {
-            'client-brief': `# Premier Oral & Implant Surgery - Client Brief
-
-## Practice Information
-
-**Practice Name:** Premier Oral, Facial & Implant Surgery  
-**Location:** Ashburn, VA  
-**Phone:** 571-291-3244  
-**Website:** https://premieroralimplantsurgery.com
-
-## Dr. Firas Ali - Credentials
-
-**Education:**
-- Doctorates in Dental Medicine from Tufts University School of Dental Medicine, Boston, MA
-- Residency: Oral and Maxillofacial Surgery at Loyola University Medical Center, Maywood, IL
-- Rotations at Harvard University/Massachusetts General Hospital
-
-**Board Certifications:**
-- Diplomate of the American Board of Oral & Maxillofacial Surgeons
-- Board Certified by the North East Regional Board of Dental Examiners
-- Fellow of the American Association of Oral & Maxillofacial Surgeons
-- Surgical Fellowship from Misch International Implant Institute
-
-**Experience Highlights:**
-- 19,000+ in-office General Anesthesia cases
-- 17,000+ Impacted Wisdom tooth extractions
-- 100,000+ Regular tooth extractions
-- Thousands of Dental Implants and Bone Grafting procedures
-
-## Services Offered
-
-1. General Anesthesia & IV Sedation
-2. Dental Implants
-3. Wisdom Teeth Extraction
-4. All-on-4 Dental Implants
-5. Teeth in a Day
-6. Bone Grafting and Augmentation
-7. Sinus Elevation
-8. Tooth Extraction
-9. Botox Cosmetic
-10. Jaw & Facial Surgery
-
-## Wave 1 Target Keywords
-
-- dental implants ashburn va (110/mo)
-- oral surgeon ashburn va (90/mo)
-- wisdom teeth removal ashburn va (70/mo)
-- all-on-4 dental implants ashburn (50/mo)
-- oral surgery ashburn va (50/mo)
-- tooth extraction ashburn va (40/mo)`,
-
-            'landing-pages': `# Wave 1 Landing Pages - Premier Oral & Implant Surgery
-
-## Page 1: Dental Implants Ashburn VA
-
-**URL:** /dental-implants-ashburn-va  
-**Target Keyword:** Dental Implants Ashburn VA (110/mo searches)
-
-**Meta Title:** Dental Implants Ashburn VA | Premier Oral & Implant Surgery | Dr. Firas Ali
-
-**Meta Description:** Looking for dental implants in Ashburn, VA? Dr. Firas Ali has placed thousands of implants. Misch International fellowship. Call 571-291-3244 today.
-
----
-
-# Dental Implants Ashburn VA
-
-Missing teeth affect your confidence, your ability to eat, and your overall health. If you're searching for dental implants in Ashburn, VA, you want a surgeon with proven results and advanced training. Call 571-291-3244 today to schedule your consultation with Dr. Firas Ali.
-
-## Why Choose Dr. Ali for Dental Implants?
-
-- **Misch International Implant Institute Fellowship** – Advanced training in implantology
-- **Thousands of Successful Implant Cases** – Extensive experience
-- **Board Certified Oral & Maxillofacial Surgeon** – Hospital-affiliated
-
-## The Dental Implant Procedure
-
-Dental implants are titanium posts surgically placed into your jawbone to replace missing tooth roots. Dr. Ali uses 3D imaging and surgical planning to ensure precise placement.
-
-## Sedation Options Available
-
-- **IV Sedation** – Sleep through your procedure
-- **General Anesthesia** – For complex cases
-- **Nitrous Oxide** – Light relaxation
-
-## Recovery & Aftercare
-
-Most patients return to normal activities within 24-48 hours.
-
----
-
-## Page 2: Oral Surgeon Ashburn VA
-
-**URL:** /oral-surgeon-ashburn-va  
-**Target Keyword:** Oral Surgeon Ashburn VA (90/mo searches)
-
-**Meta Title:** Oral Surgeon Ashburn VA | Dr. Firas Ali | Board Certified
-
----
-
-[Additional pages: Wisdom Teeth, All-on-4, Oral Surgery, Tooth Extraction]`,
-
-            'tiktech-analysis': `# TikTech.net SEO Competitive Analysis Report
-
-## Executive Summary
-
-TikTech Services is a local computer repair business in Ashburn, VA.
-
-**Key Findings:**
-- 24/7 availability (rare competitive advantage)
-- Same-day repair service
-- Strong customer reviews (4-5 stars)
-
-**Major Opportunities They're Missing:**
-1. "Near me" keywords (823K searches/mo)
-2. Brand-specific repairs (Dell, HP, Lenovo)
-3. Video content / YouTube presence
-4. Pricing transparency
-5. Surrounding cities coverage
-
-**Recommendations:**
-- Expand local keyword targeting
-- Increase review volume
-- Add pricing content
-- Launch video content strategy`,
-
-            'local-seo-strategy': `# AZ Tech Services Local SEO Domination Strategy
-
-## Google Business Profile Optimization
-
-### Phase 1: Foundation (Week 1-2)
-- [ ] Verify primary category: "Computer Repair Service"
-- [ ] Add all service categories
-- [ ] Optimize business description with keywords
-- [ ] Upload 20+ photos
-- [ ] Add Q&A section
-
-### Phase 2: Engagement (Week 3-4)
-- [ ] Post weekly updates
-- [ ] Respond to all reviews
-- [ ] Add services list
-- [ ] Set up booking button
-
-## Citation Building Plan
-
-**Tier 1 - Essential:**
-- Google Business Profile
-- Apple Maps
-- Bing Places
-- Yelp
-- Facebook
-- Nextdoor
-
-**Tier 2 - Data Aggregators:**
-- Data Axle
-- Neustar/Localeze
-- Foursquare
-
-## Review Generation Strategy
-
-**Target: 50+ reviews in 6 months**
-
-**Tactics:**
-1. In-person request after service
-2. QR code on receipts
-3. SMS follow-up 24h after service
-4. Email campaign for past customers
-
-## Location Pages to Create
-
-1. Computer Repair Sterling VA
-2. Laptop Repair Leesburg VA
-3. PC Repair Chantilly VA
-4. MacBook Repair Reston VA`
-        };
-
         const agents = [
-            {
-                id: 'coordinator',
-                name: 'Coordinator',
-                shortRole: 'Orchestrates team tasks',
-                fullRole: 'Orchestrates the entire SEO team, understands user requests, breaks them into tasks, delegates to specialized agents, and synthesizes results into actionable deliverables.',
-                status: 'idle',
-                tasksCompleted: 24,
-                tokensUsed: '45K',
-                avatarClass: 'coordinator',
-                avatar: 'CO',
-                recentTasks: [
-                    { name: 'Created client brief for Premier Oral Surgery', time: '2h ago', status: 'completed' },
-                    { name: 'Spawned Researcher and Content Strategist', time: '3h ago', status: 'completed' },
-                    { name: 'Initialized SEO Team system', time: '5h ago', status: 'completed' }
-                ]
-            },
-            {
-                id: 'researcher',
-                name: 'Researcher',
-                shortRole: 'Keyword & competitor research',
-                fullRole: 'Specializes in keyword research, competitor analysis, SERP analysis, and market intelligence. Finds high-volume, low-competition keywords and identifies content gaps.',
-                status: 'idle',
-                tasksCompleted: 18,
-                tokensUsed: '38K',
-                avatarClass: 'researcher',
-                avatar: 'RE',
-                recentTasks: [
-                    { name: 'Completed TikTech competitor analysis', time: '5h ago', status: 'completed' },
-                    { name: 'Analyzed AZ Tech vs TikTech comparison', time: '3h ago', status: 'completed' },
-                    { name: 'Wave 1 competitor research', time: '2h ago', status: 'completed' }
-                ]
-            },
-            {
-                id: 'content',
-                name: 'Content Strategist',
-                shortRole: 'Content plans & briefs',
-                fullRole: 'Builds content strategies, editorial calendars, content briefs, and topic cluster architecture. Focuses on exploiting competitor weaknesses and maximizing SEO impact.',
-                status: 'idle',
-                tasksCompleted: 15,
-                tokensUsed: '42K',
-                avatarClass: 'content',
-                avatar: 'CS',
-                recentTasks: [
-                    { name: 'Created 6 landing pages for Wave 1', time: '2h ago', status: 'completed' },
-                    { name: 'Built 90-day content calendar', time: '3h ago', status: 'completed' },
-                    { name: 'Analyzed TikTech content gaps', time: '5h ago', status: 'completed' }
-                ]
-            },
-            {
-                id: 'local',
-                name: 'Local SEO',
-                shortRole: 'GBP, citations, reviews',
-                fullRole: 'Manages Google Business Profile optimization, local citations, review generation, and location page strategy. Focuses on dominating local search results.',
-                status: 'idle',
-                tasksCompleted: 8,
-                tokensUsed: '28K',
-                avatarClass: 'local',
-                avatar: 'LS',
-                recentTasks: [
-                    { name: 'Created local domination strategy (43KB)', time: '3h ago', status: 'completed' },
-                    { name: 'Built GBP optimization checklist', time: '4h ago', status: 'completed' },
-                    { name: 'Designed review generation strategy', time: '5h ago', status: 'completed' }
-                ]
-            },
-            {
-                id: 'technical',
-                name: 'Technical Auditor',
-                shortRole: 'Site audits & performance',
-                fullRole: 'Conducts site audits, Core Web Vitals analysis, crawlability checks, and technical SEO issue identification. Ensures sites are optimized for search engine crawling.',
-                status: 'idle',
-                tasksCompleted: 6,
-                tokensUsed: '15K',
-                avatarClass: 'technical',
-                avatar: 'TA',
-                recentTasks: [
-                    { name: 'Technical audit template created', time: '1d ago', status: 'completed' },
-                    { name: 'Core Web Vitals checklist', time: '2d ago', status: 'completed' }
-                ]
-            },
-            {
-                id: 'analytics',
-                name: 'Analytics',
-                shortRole: 'Reporting & tracking',
-                fullRole: 'Monitors rank tracking, traffic analysis, trend identification, and performance reporting. Generates weekly and monthly SEO reports with actionable insights.',
-                status: 'idle',
-                tasksCompleted: 10,
-                tokensUsed: '22K',
-                avatarClass: 'analytics',
-                avatar: 'AN',
-                recentTasks: [
-                    { name: 'Set up weekly competitor tracker', time: '1d ago', status: 'completed' },
-                    { name: 'Created monthly report template', time: '1d ago', status: 'completed' }
-                ]
-            },
-            {
-                id: 'link',
-                name: 'Link Builder',
-                shortRole: 'Prospecting & outreach',
-                fullRole: 'Handles link prospecting, outreach strategy, digital PR, and backlink acquisition. Finds high-quality link opportunities and manages outreach campaigns.',
-                status: 'idle',
-                tasksCompleted: 4,
-                tokensUsed: '12K',
-                avatarClass: 'link',
-                avatar: 'LB',
-                recentTasks: [
-                    { name: 'Link building strategy document', time: '2d ago', status: 'completed' }
-                ]
-            },
-            {
-                id: 'ecommerce',
-                name: 'E-commerce SEO',
-                shortRole: 'Product & category pages',
-                fullRole: 'Specializes in product page optimization, category architecture, faceted navigation, and conversion-focused SEO for online stores.',
-                status: 'idle',
-                tasksCompleted: 3,
-                tokensUsed: '8K',
-                avatarClass: 'ecommerce',
-                avatar: 'EC',
-                recentTasks: [
-                    { name: 'E-commerce SEO agent definition', time: '2d ago', status: 'completed' }
-                ]
-            }
+            { id: 'coordinator', name: 'Coordinator', emoji: '🎯', role: 'Orchestrates team workflow', status: 'idle', tasks: 24, tokens: '45K', color: 'coordinator' },
+            { id: 'researcher', name: 'Researcher', emoji: '🔬', role: 'Keyword & competitor analysis', status: 'idle', tasks: 18, tokens: '38K', color: 'researcher' },
+            { id: 'content', name: 'Content', emoji: '✍️', role: 'Content strategy & briefs', status: 'idle', tasks: 15, tokens: '42K', color: 'content' },
+            { id: 'local', name: 'Local SEO', emoji: '📍', role: 'GBP, citations, reviews', status: 'idle', tasks: 8, tokens: '28K', color: 'local' },
+            { id: 'technical', name: 'Technical', emoji: '⚙️', role: 'Site audits & performance', status: 'idle', tasks: 6, tokens: '15K', color: 'technical' },
+            { id: 'analytics', name: 'Analytics', emoji: '📈', role: 'Reporting & tracking', status: 'idle', tasks: 10, tokens: '22K', color: 'analytics' },
+            { id: 'link', name: 'Link Builder', emoji: '🔗', role: 'Prospecting & outreach', status: 'idle', tasks: 4, tokens: '12K', color: 'link' },
+            { id: 'ecommerce', name: 'E-commerce', emoji: '🛒', role: 'Product & category SEO', status: 'idle', tasks: 3, tokens: '8K', color: 'ecommerce' }
         ];
 
         const projects = [
@@ -856,97 +555,47 @@ TikTech Services is a local computer repair business in Ashburn, VA.
                 id: 1,
                 name: 'Premier Oral & Implant Surgery',
                 client: 'Dr. Firas Ali - Ashburn, VA',
-                type: 'Local SEO - Compact Keywords',
                 progress: 35,
                 status: 'Wave 1 Complete',
-                agents: ['Researcher', 'Content Strategist', 'Local SEO'],
                 tasks: [
-                    { 
-                        name: 'Client brief created', 
-                        status: 'completed', 
-                        time: 'Feb 26',
-                        files: [
-                            { name: 'client-brief.md', size: '6KB', contentKey: 'client-brief' }
-                        ]
-                    },
-                    { 
-                        name: '6 landing pages written', 
-                        status: 'completed', 
-                        time: 'Feb 26',
-                        files: [
-                            { name: 'wave1-landing-pages.md', size: '21KB', contentKey: 'landing-pages' }
-                        ]
-                    },
-                    { 
-                        name: 'Competitor analysis - TikTech', 
-                        status: 'completed', 
-                        time: 'Feb 26',
-                        files: [
-                            { name: 'tiktech-analysis.md', size: '16KB', contentKey: 'tiktech-analysis' }
-                        ]
-                    },
-                    { 
-                        name: 'Wave 2 planning - 6 more pages', 
-                        status: 'pending', 
-                        time: 'Next'
-                    }
+                    { name: 'Client brief created', status: 'completed', time: 'Feb 26', files: [{ name: 'client-brief.md', size: '6KB' }] },
+                    { name: '6 landing pages written', status: 'completed', time: 'Feb 26', files: [{ name: 'wave1-landing-pages.md', size: '21KB' }] },
+                    { name: 'Competitor analysis', status: 'completed', time: 'Feb 26', files: [{ name: 'tiktech-analysis.md', size: '16KB' }] },
+                    { name: 'Wave 2 planning', status: 'pending', time: 'Next' }
                 ]
             },
             {
                 id: 2,
                 name: 'AZ Tech SEO Team',
                 client: 'Internal - SEO Agency Build',
-                type: 'System Development',
                 progress: 85,
                 status: 'Operational',
-                agents: ['All 8 Agents'],
                 tasks: [
-                    { 
-                        name: '8 agent definitions created', 
-                        status: 'completed', 
-                        time: 'Feb 26',
-                        files: [
-                            { name: 'coordinator.md', size: '2KB' },
-                            { name: 'researcher.md', size: '2KB' },
-                            { name: 'content-strategist.md', size: '2KB' },
-                            { name: 'local-seo.md', size: '3KB' },
-                            { name: 'technical-auditor.md', size: '2KB' },
-                            { name: 'analytics.md', size: '3KB' },
-                            { name: 'link-builder.md', size: '2KB' },
-                            { name: 'ecommerce-seo.md', size: '3KB' }
-                        ]
-                    },
-                    { 
-                        name: 'Dashboard built with interactions', 
-                        status: 'completed', 
-                        time: 'Feb 27',
-                        files: [
-                            { name: 'index.html', size: '32KB' }
-                        ]
-                    },
-                    { 
-                        name: 'SEMrush integration planned', 
-                        status: 'pending', 
-                        time: 'Next'
-                    }
+                    { name: '8 agent definitions created', status: 'completed', time: 'Feb 26' },
+                    { name: 'Dashboard built', status: 'completed', time: 'Feb 27' },
+                    { name: 'SEMrush integration', status: 'pending', time: 'Next' }
                 ]
             }
         ];
+
+        const fileContents = {
+            'client-brief': '# Premier Oral \u0026 Implant Surgery\\n\\nDr. Firas Ali - Board Certified Oral Surgeon\\n19,000+ anesthesia cases | 17,000+ wisdom teeth | 100,000+ extractions',
+            'landing-pages': '# Wave 1 Landing Pages\\n\\n6 SEO-optimized pages for dental implant keywords',
+            'tiktech-analysis': '# TikTech Competitive Analysis\\n\\nLocal computer repair competitor research'
+        };
 
         let currentFileContent = '';
 
         function renderAgents() {
             const list = document.getElementById('agentList');
             list.innerHTML = agents.map(agent => `
-                <div class="agent-item" onclick="showAgentDetails('${agent.id}')">
-                    <div class="agent-avatar ${agent.avatarClass}">${agent.avatar}</div>
-                    <div class="agent-info">
-                        <h3>${agent.name}</h3>
-                        <div class="role">${agent.shortRole}</div>
-                    </div>
-                    <div class="agent-status">
-                        <span class="badge ${agent.status}">${agent.status}</span>
-                        <div class="meta">${agent.tasksCompleted} tasks</div>
+                <div class="agent-card" data-agent="${agent.color}" onclick="showAgentDetails('${agent.id}')">
+                    <div class="agent-avatar">${agent.emoji}</div>
+                    <h3>${agent.name}</h3>
+                    <div class="role">${agent.role}</div>
+                    <div class="agent-stats">
+                        <div class="agent-stat"><span>${agent.tasks}</span> tasks</div>
+                        <div class="agent-stat"><span>${agent.tokens}</span> tokens</div>
                     </div>
                 </div>
             `).join('');
@@ -955,12 +604,17 @@ TikTech Services is a local computer repair business in Ashburn, VA.
         function renderProjects() {
             const list = document.getElementById('projectList');
             list.innerHTML = projects.map(project => `
-                <div class="project-item" onclick="showProjectDetails(${project.id})">
+                <div class="project-card" onclick="showProjectDetails(${project.id})">
                     <div class="project-header">
                         <h4>${project.name}</h4>
-                        <span class="pct">${project.progress}%</span>
+                        <div class="project-progress">
+                            <div class="pct">${project.progress}%</div>
+                        </div>
                     </div>
-                    <div class="project-meta">${project.client} • ${project.status}</div>
+                    <div class="project-meta">
+                        <span class="project-tag">${project.client}</span>
+                        <span class="project-tag">${project.status}</span>
+                    </div>
                     <div class="progress-bar">
                         <div class="progress-fill" style="width: ${project.progress}%"></div>
                     </div>
@@ -970,136 +624,73 @@ TikTech Services is a local computer repair business in Ashburn, VA.
 
         function showAgentDetails(agentId) {
             const agent = agents.find(a => a.id === agentId);
-            if (!agent) return;
-
             document.getElementById('modalTitle').textContent = agent.name;
             document.getElementById('modalBody').innerHTML = `
-                <div class="detail-row">
-                    <div class="detail-label">Role</div>
-                    <div class="detail-value">${agent.fullRole}</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Status</div>
-                    <div class="detail-value" style="text-transform: capitalize">${agent.status}</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Performance</div>
-                    <div class="detail-value">${agent.tasksCompleted} tasks completed • ${agent.tokensUsed} tokens used</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Recent Tasks</div>
-                    <div class="task-list">
-                        ${agent.recentTasks.map(task => `
-                            <div class="task-item ${task.status}">
-                                <div class="task-name">${task.name}</div>
-                                <div class="task-meta">${task.time}</div>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
+                <div class="detail-label">Role</div>
+                <div style="margin-bottom: 1rem">${agent.role}</div>
+                <div class="detail-label">Status</div>
+                <div style="margin-bottom: 1rem; text-transform: capitalize">${agent.status}</div>
+                <div class="detail-label">Performance</div>
+                <div>${agent.tasks} tasks completed • ${agent.tokens} tokens used</div>
             `;
             document.getElementById('modal').classList.add('active');
         }
 
         function showProjectDetails(projectId) {
             const project = projects.find(p => p.id === projectId);
-            if (!project) return;
-
             document.getElementById('modalTitle').textContent = project.name;
             document.getElementById('modalBody').innerHTML = `
-                <div class="detail-row">
-                    <div class="detail-label">Client</div>
-                    <div class="detail-value">${project.client}</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Type</div>
-                    <div class="detail-value">${project.type}</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Status</div>
-                    <div class="detail-value">${project.status}</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Progress</div>
-                    <div class="detail-value">${project.progress}% complete</div>
-                    <div class="progress-bar" style="margin-top: 0.5rem">
-                        <div class="progress-fill" style="width: ${project.progress}%"></div>
-                    </div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Active Agents</div>
-                    <div class="detail-value">${Array.isArray(project.agents) ? project.agents.join(', ') : project.agents}</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Tasks</div>
-                    <div class="task-list">
-                        ${project.tasks.map(task => `
-                            <div class="task-item ${task.status}">
-                                <div class="task-name">${task.name}</div>
-                                <div class="task-meta">${task.time}</div>
-                                ${task.files ? `
-                                <div class="file-list">
-                                    ${task.files.map(file => `
-                                        <div class="file-item" onclick="${file.contentKey ? `viewFile('${file.name}', '${file.contentKey}')` : ''}">
-                                            <div class="file-header">
-                                                <span class="file-name">${file.name}</span>
-                                                <span class="file-size">${file.size}</span>
-                                            </div>
-                                            ${file.contentKey ? '<div class="file-hint">Tap to view full content</div>' : ''}
+                <div class="detail-label">Client</div>
+                <div style="margin-bottom: 1rem">${project.client}</div>
+                <div class="detail-label">Progress</div>
+                <div style="margin-bottom: 1rem">${project.progress}% complete</div>
+                <div class="detail-label">Tasks</div>
+                <div class="task-list">
+                    ${project.tasks.map(task => `
+                        <div class="task-item ${task.status}">
+                            <div class="task-name">${task.name}</div>
+                            <div class="task-meta">${task.time}</div>
+                            ${task.files ? `
+                            <div class="file-list">
+                                ${task.files.map(file => `
+                                    <div class="file-item" onclick="viewFile('${file.name}', '${file.name.split('.')[0]}')">
+                                        <div class="file-icon">📄</div>
+                                        <div class="file-info">
+                                            <div class="file-name">${file.name}</div>
+                                            <div class="file-size">${file.size}</div>
                                         </div>
-                                    `).join('')}
-                                </div>
-                                ` : ''}
-                            </div>
-                        `).join('')}
-                    </div>
+                                    </div>
+                                `).join('')}
+                            </div>` : ''}
+                        </div>
+                    `).join('')}
                 </div>
             `;
             document.getElementById('modal').classList.add('active');
         }
 
         function viewFile(filename, contentKey) {
-            const content = fileContents[contentKey];
-            if (!content) {
-                alert('File content not available in this demo');
-                return;
-            }
-            
+            const content = fileContents[contentKey] || 'File content not available';
             currentFileContent = content;
             document.getElementById('fileViewerTitle').textContent = filename;
             document.getElementById('fileContent').textContent = content;
             document.getElementById('fileViewer').classList.add('active');
         }
 
-        function closeFileViewer() {
-            document.getElementById('fileViewer').classList.remove('active');
-        }
+        function closeModal() { document.getElementById('modal').classList.remove('active'); }
+        function closeFileViewer() { document.getElementById('fileViewer').classList.remove('active'); }
 
         function copyFileContent() {
-            navigator.clipboard.writeText(currentFileContent).then(() => {
-                alert('Content copied to clipboard!');
-            }).catch(() => {
-                // Fallback for older browsers
-                const textarea = document.createElement('textarea');
-                textarea.value = currentFileContent;
-                document.body.appendChild(textarea);
-                textarea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textarea);
-                alert('Content copied to clipboard!');
-            });
+            navigator.clipboard.writeText(currentFileContent).then(() => alert('Copied!'));
         }
 
-        function closeModal() {
-            document.getElementById('modal').classList.remove('active');
+        function showTab(tab) {
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            event.target.closest('.nav-item').classList.add('active');
         }
 
-        // Close modal when clicking outside
-        document.getElementById('modal').addEventListener('click', function(e) {
-            if (e.target === this) closeModal();
-        });
+        document.getElementById('modal').addEventListener('click', e => { if(e.target === e.currentTarget) closeModal(); });
 
-        // Initialize
         renderAgents();
         renderProjects();
     </script>
