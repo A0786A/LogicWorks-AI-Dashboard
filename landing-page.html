@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LogicWorks.AI | AI-Powered SEO & AEO Services</title>
+    <meta name="description" content="AI-powered SEO and Answer Engine Optimization services. 3x faster results at 50% lower cost than traditional agencies.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --accent: #06b6d4;
+            --dark: #0f172a;
+            --dark-light: #1e293b;
+            --gray: #64748b;
+            --light: #f8fafc;
+            --success: #22c55e;
+            --gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #06b6d4 100%);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--light);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover { color: var(--light); }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.5);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--light);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .btn-outline:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .btn-large {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 10rem 2rem 6rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(6, 182, 212, 0.1) 0%, transparent 40%);
+            pointer-events: none;
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 span {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-description {
+            font-size: 1.25rem;
+            color: var(--gray);
+            margin-bottom: 2rem;
+            max-width: 500px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+        }
+
+        .hero-stat {
+            text-align: left;
+        }
+
+        .hero-stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--light);
+        }
+
+        .hero-stat-label {
+            font-size: 0.875rem;
+            color: var(--gray);
+        }
+
+        /* Hero Visual */
+        .hero-visual {
+            position: relative;
+        }
+
+        .dashboard-preview {
+            background: var(--dark-light);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+        }
+
+        .dashboard-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .dashboard-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dashboard-dot.red { background: #ef4444; }
+        .dashboard-dot.yellow { background: #f59e0b; }
+        .dashboard-dot.green { background: #22c55e; }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .dashboard-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 1rem;
+        }
+
+        .dashboard-card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .dashboard-card-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .dashboard-card-value.up { color: var(--success); }
+
+        /* Logos Section */
+        .logos {
+            padding: 4rem 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .logos-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .logos-title {
+            font-size: 0.875rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 2rem;
+        }
+
+        .logos-grid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 4rem;
+            flex-wrap: wrap;
+        }
+
+        .logo-item {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--gray);
+            opacity: 0.6;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 6rem 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-badge {
+            display: inline-block;
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--accent);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .section-description {
+            font-size: 1.125rem;
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--dark-light);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 20px 40px -15px rgba(99, 102, 241, 0.2);
+        }
+
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-description {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* Services Section */
+        .services {
+            padding: 6rem 2rem;
+            background: var(--dark-light);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .service-card {
+            background: var(--dark);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 2.5rem;
+            transition: all 0.3s;
+        }
+
+        .service-card:hover {
+            border-color: var(--primary);
+        }
+
+        .service-card.featured {
+            border-color: var(--primary);
+            position: relative;
+        }
+
+        .service-card.featured::before {
+            content: 'Most Popular';
+            position: absolute;
+            top: -12px;
+            right: 2rem;
+            background: var(--gradient);
+            color: white;
+            padding: 0.25rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .service-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .service-price {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .service-price span {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--gray);
+        }
+
+        .service-description {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+        }
+
+        .service-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .service-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            color: var(--gray);
+        }
+
+        .service-features li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        /* Process Section */
+        .process {
+            padding: 6rem 2rem;
+        }
+
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .process-step {
+            text-align: center;
+            position: relative;
+        }
+
+        .process-step:not(:last-child)::after {
+            content: '→';
+            position: absolute;
+            top: 2rem;
+            right: -1.5rem;
+            color: var(--gray);
+            font-size: 1.5rem;
+        }
+
+        .step-number {
+            width: 64px;
+            height: 64px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 auto 1.5rem;
+        }
+
+        .step-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .step-description {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 6rem 2rem;
+            background: var(--dark-light);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .testimonial-card {
+            background: var(--dark);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 2rem;
+        }
+
+        .testimonial-stars {
+            color: #f59e0b;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+
+        .testimonial-text {
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .testimonial-avatar {
+            width: 48px;
+            height: 48px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .testimonial-name {
+            font-weight: 600;
+        }
+
+        .testimonial-role {
+            font-size: 0.875rem;
+            color: var(--gray);
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 6rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gradient);
+            opacity: 0.1;
+        }
+
+        .cta-container {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .cta p {
+            font-size: 1.125rem;
+            color: var(--gray);
+            margin-bottom: 2rem;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 4rem 2rem 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .footer-brand {
+            max-width: 300px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-description {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .footer-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--light);
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 3rem auto 0;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+            color: var(--gray);
+            font-size: 0.875rem;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 1024px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-description {
+                margin: 0 auto 2rem;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .hero-stats {
+                justify-content: center;
+            }
+
+            .hero-visual {
+                display: none;
+            }
+
+            .features-grid,
+            .testimonials-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .process-steps {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .process-step:nth-child(2)::after { display: none; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+
+            .hero {
+                padding: 8rem 1.5rem 4rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .features-grid,
+            .services-grid,
+            .testimonials-grid,
+            .process-steps {
+                grid-template-columns: 1fr;
+            }
+
+            .process-step::after { display: none; }
+
+            .footer-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <div class="logo-icon">🎯</div>
+                LogicWorks.AI
+            </a>
+            <div class="nav-links">
+                <a href="#services" class="nav-link">Services</a>
+                <a href="#process" class="nav-link">Process</a>
+                <a href="#pricing" class="nav-link">Pricing</a>
+                <a href="#contact" class="btn btn-primary">Get Free Audit</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge">Now Offering AEO (Answer Engine Optimization)</div>
+                <h1>AI-Powered SEO.
+<br><span>3x Faster Results.</span></h1>
+                <p class="hero-description">Get premium SEO and AEO services at half the cost of traditional agencies. Our AI agents work 24/7 to rank your business higher on Google, ChatGPT, and Perplexity.</p>
+                <div class="hero-buttons">
+                    <a href="#contact" class="btn btn-primary btn-large">Get Free SEO Audit</a>
+                    <a href="#services" class="btn btn-outline btn-large">View Services</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">150%</div>
+                        <div class="hero-stat-label">Avg. Traffic Increase</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">50%</div>
+                        <div class="hero-stat-label">Lower Cost</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">3x</div>
+                        <div class="hero-stat-label">Faster Delivery</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="hero-visual">
+                <div class="dashboard-preview">
+                    <div class="dashboard-header">
+                        <div class="dashboard-dot red"></div>
+                        <div class="dashboard-dot yellow"></div>
+                        <div class="dashboard-dot green"></div>
+                        <span style="margin-left: 1rem; font-size: 0.875rem; color: var(--gray)">LogicWorks.AI Dashboard</span>
+                    </div>
+                    <div class="dashboard-grid">
+                        <div class="dashboard-card">
+                            <div class="dashboard-card-header">📈 Organic Traffic</div>
+                            <div class="dashboard-card-value up">+147%</div>
+                        </div>
+                        <div class="dashboard-card">
+                            <div class="dashboard-card-header">🔍 Keyword Rankings</div>
+                            <div class="dashboard-card-value up">+23</div>
+                        </div>
+                        <div class="dashboard-card">
+                            <div class="dashboard-card-header">👆 Click-Through Rate</div>
+                            <div class="dashboard-card-value up">5.2%</div>
+                        </div>
+                        <div class="dashboard-card">
+                            <div class="dashboard-card-header">⚡ Page Speed</div>
+                            <div class="dashboard-card-value up">92/100</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Logos Section -->
+    <section class="logos">
+        <div class="logos-container">
+            <div class="logos-title">Trusted by forward-thinking businesses</div>
+            <div class="logos-grid">
+                <div class="logo-item">Premier Oral Surgery</div>
+                <div class="logo-item">AZ Tech Services</div>
+                <div class="logo-item">TikTech</div>
+                <div class="logo-item">DentalCare Pro</div>
+                <div class="logo-item">RepairMax</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">Why Choose Us</div>
+                <h2 class="section-title">AI + Human Expertise = Better Results</h2>
+                <p class="section-description">We combine the speed and consistency of AI with strategic human oversight to deliver SEO that actually works.</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3 class="feature-title">3x Faster Delivery</h3>
+                    <p class="feature-description">Our AI agents work 24/7 to complete tasks in hours, not weeks. Get your SEO roadmap in days, not months.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3 class="feature-title">50% Lower Cost</div>
+                    <p class="feature-description">No bloated agency overhead. Pay for results, not fancy offices. Premium SEO at freelancer prices.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3 class="feature-title">Full Transparency</div>
+                    <p class="feature-description">Watch your SEO progress in real-time. See exactly what our AI agents are working on, 24/7.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3 class="feature-title">AEO-Ready</div>
+                    <p class="feature-description">Optimize for the future. We ensure your business appears in ChatGPT, Perplexity, and AI search results.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3 class="feature-title">Consistent Quality</div>
+                    <p class="feature-description">AI doesn't have bad days. Every task follows proven frameworks. Human experts review and refine.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h3 class="feature-title">Scalable Systems</div>
+                    <p class="feature-description">From 1 location to 100, our AI scales with you. Bulk optimizations without losing quality.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">Services</div>
+                <h2 class="section-title">SEO & AEO Services</h2>
+                <p class="section-description">Choose the package that fits your business. All include our AI-powered dashboard and monthly reporting.</p>
+            </div>
+            
+            <div class="services-grid">
+                <div class="service-card">
+                    <h3 class="service-name">SEO Audit</h3>
+                    <div class="service-price">$1,500</div>
+                    <p class="service-description">Complete analysis of your website with actionable roadmap.</p>
+                    <ul class="service-features">
+                        <li>20-page technical audit</li>
+                        <li>Competitor analysis</li>
+                        <li>Keyword research (50 keywords)</li>
+                        <li>Content gap analysis</li>
+                        <li>90-day action plan</li>
+                    </ul>
+                    <a href="#contact" class="btn btn-outline" style="width: 100%; display: block; text-align: center;">Get Started</a>
+                </div>
+                
+                <div class="service-card featured">
+                    <h3 class="service-name">Growth SEO</h3>
+                    <div class="service-price">$2,000<span>/month</span></div>
+                    <p class="service-description">Full-service SEO for growing businesses. Our most popular plan.</p>
+                    <ul class="service-features">
+                        <li>Everything in Audit, plus:</li>
+                        <li>4 blog posts/month</li>
+                        <li>On-page optimization</li>
+                        <li>Local SEO (GBP, citations)</li>
+                        <li>10 backlinks/month</li>
+                        <li>Monthly reporting</li>
+                        <li>AEO optimization</li>
+                    </ul>
+                    <a href="#contact" class="btn btn-primary" style="width: 100%; display: block; text-align: center;">Get Started</a>
+                </div>
+                
+                <div class="service-card">
+                    <h3 class="service-name">Scale SEO + AEO</h3>
+                    <div class="service-price">$5,000<span>/month</span></div>
+                    <p class="service-description">Aggressive growth for established companies. Dominate search.</p>
+                    <ul class="service-features">
+                        <li>Everything in Growth, plus:</li>
+                        <li>8 blog posts/month</li>
+                        <li>20 backlinks/month</li>
+                        <li>Video content optimization</li>
+                        <li>Advanced AEO monitoring</li>
+                        <li>Bi-weekly strategy calls</li>
+                        <li>Priority support</li>
+                    </ul>
+                    <a href="#contact" class="btn btn-outline" style="width: 100%; display: block; text-align: center;">Get Started</a>
+                </div>
+                
+                <div class="service-card">
+                    <h3 class="service-name">AEO Package</h3>
+                    <div class="service-price">$3,500<span>/one-time</span></div>
+                    <p class="service-description">Optimize for AI search engines. Be found on ChatGPT, Perplexity, Claude.</p>
+                    <ul class="service-features">
+                        <li>AEO audit & strategy</li>
+                        <li>Structured data optimization</li>
+                        <li>Entity optimization</li>
+                        <li>FAQ schema implementation</li>
+                        <li>AI search monitoring setup</li>
+                        <li>Monthly AEO reports</li>
+                    </ul>
+                    <a href="#contact" class="btn btn-outline" style="width: 100%; display: block; text-align: center;">Get Started</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section class="process" id="process">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">Our Process</div>
+                <h2 class="section-title">How It Works</h2>
+                <p class="section-description">Simple, transparent, and effective. See results in 90 days or less.</p>
+            </div>
+            
+            <div class="process-steps">
+                <div class="process-step">
+                    <div class="step-number">1</div>
+                    <h3 class="step-title">Free Audit</h3>
+                    <p class="step-description">We analyze your website, competitors, and opportunities. Delivered in 48 hours.</p>
+                </div>
+                
+                <div class="process-step">
+                    <div class="step-number">2</div>
+                    <h3 class="step-title">Strategy</h3>
+                    <p class="step-description">Custom roadmap based on your goals, budget, and timeline. No cookie-cutter plans.</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">3</div>
+                    <h3 class="step-title">Execution</h3>
+                    <p class="step-description">Our AI agents get to work. You watch progress in real-time on your dashboard.</p>
+                </div>
+                
+                <div class="process-step">
+                    <div class="step-number">4</div>
+                    <h3 class="step-title">Results</h3>
+                    <p class="step-description">Monthly reporting shows rankings, traffic, and ROI. We iterate and scale.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">Testimonials</div>
+                <h2 class="section-title">What Clients Say</h2>
+                <p class="section-description">Real results from real businesses. Join them.</p>
+            </div>
+            
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text">"LogicWorks.AI delivered more in 3 months than our previous agency did in a year. The dashboard transparency is incredible—we can see exactly what's happening."</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">FA</div>
+                        <div>
+                            <div class="testimonial-name">Dr. Firas Ali</div>
+                            <div class="testimonial-role">Premier Oral Surgery</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text">"Finally, an SEO agency that explains what they're doing. The AI approach means consistent quality and faster results. Our traffic is up 200%."</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">MK</div>
+                        <div>
+                            <div class="testimonial-name">Mike K.</div>
+                            <div class="testimonial-role">AZ Tech Services</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text">"The AEO optimization is forward-thinking. We're already seeing our business mentioned in ChatGPT responses. That's the future of search."</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">SJ</div>
+                        <div>
+                            <div class="testimonial-name">Sarah J.</div>
+                            <div class="testimonial-role">DentalCare Pro</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" id="contact">
+        <div class="cta-container">
+            <h2>Ready to Rank Higher?</h2>
+            <p>Get a free SEO audit and see exactly how we can help your business grow. No obligation, no sales pitch—just actionable insights.</p>
+            <a href="mailto:hello@logicworks.ai?subject=Free%20SEO%20Audit%20Request" class="btn btn-primary btn-large">Get Your Free Audit</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <div class="footer-logo">
+                    <div class="logo-icon" style="width: 32px; height: 32px; font-size: 1rem;">🎯</div>
+                    LogicWorks.AI
+                </div>
+                <p class="footer-description">AI-powered SEO and AEO services for businesses that want to dominate search—today and in the AI future.</p>
+            </div>
+            
+            <div>
+                <h4 class="footer-title">Services</h4>
+                <ul class="footer-links">
+                    <li><a href="#">SEO Audit</a></li>
+                    <li><a href="#">Growth SEO</a></li>
+                    <li><a href="#">Scale SEO</a></li>
+                    <li><a href="#">AEO Package</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4 class="footer-title">Company</h4>
+                <ul class="footer-links">
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Case Studies</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4 class="footer-title">Contact</h4>
+                <ul class="footer-links">
+                    <li><a href="mailto:hello@logicworks.ai">hello@logicworks.ai</a></li>
+                    <li><a href="#">Schedule a Call</a></li>
+                    <li><a href="#">LinkedIn</a></li>
+                    <li><a href="#">Twitter</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            © 2026 LogicWorks.AI. All rights reserved. Made with 🤖 + ❤️
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Add scroll effect to navigation
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('.nav');
+            if (window.scrollY > 50) {
+                nav.style.background = 'rgba(15, 23, 42, 0.98)';
+            } else {
+                nav.style.background = 'rgba(15, 23, 42, 0.9)';
+            }
+        });
+    </script>
+</body>
+</html>
