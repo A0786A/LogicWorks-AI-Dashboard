@@ -405,18 +405,90 @@
             background: var(--bg-secondary);
         }
 
-        .file-content {
+        /* HTML Content Styling */
+        .html-content {
             background: var(--bg-card);
-            padding: 1.25rem;
             border-radius: 12px;
-            font-family: monospace;
-            font-size: 0.8rem;
-            line-height: 1.7;
+            padding: 1.5rem;
+            line-height: 1.8;
             color: var(--text-secondary);
-            white-space: pre-wrap;
-            word-break: break-word;
-            max-height: 60vh;
-            overflow-y: auto;
+        }
+
+        .html-content h1 {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-blue);
+        }
+
+        .html-content h2 {
+            font-size: 1.2rem;
+            color: var(--text-primary);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .html-content h3 {
+            font-size: 1rem;
+            color: var(--accent-cyan);
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .html-content p {
+            margin-bottom: 1rem;
+        }
+
+        .html-content ul, .html-content ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .html-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .html-content strong {
+            color: var(--text-primary);
+        }
+
+        .html-content code {
+            background: rgba(255,255,255,0.1);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+
+        .html-content blockquote {
+            border-left: 3px solid var(--accent-purple);
+            padding-left: 1rem;
+            margin: 1rem 0;
+            color: var(--text-muted);
+        }
+
+        .html-content hr {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 1.5rem 0;
+        }
+
+        .html-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        .html-content th, .html-content td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .html-content th {
+            color: var(--text-primary);
+            font-weight: 600;
         }
 
         .btn-primary {
@@ -533,12 +605,50 @@
             <button class="modal-close" onclick="closeFileViewer()">&times;</button>
         </div>
         <div class="modal-body">
-            <div class="file-content" id="fileContent"></div>
-            <button class="btn-primary" onclick="copyFileContent()">Copy to Clipboard</button>
+            <div class="html-content" id="fileContent"></div>
+            <button class="btn-primary" onclick="copyFileContent()">Copy as Markdown</button>
         </div>
     </div>
 
     <script>
+        // Simple markdown to HTML converter
+        function markdownToHtml(markdown) {
+            let html = markdown
+                // Headers
+                .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+                .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+                .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+                // Bold
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                // Italic
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                // Code
+                .replace(/`([^`]+)`/g, '<code>$1</code>')
+                // Links
+                .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" style="color: var(--accent-blue)">$1</a>')
+                // Lists
+                .replace(/^\- (.*$)/gim, '<li>$1</li>')
+                .replace(/^\d+\. (.*$)/gim, '<li>$1</li>')
+                // Blockquotes
+                .replace(/^\> (.*$)/gim, '<blockquote>$1</blockquote>')
+                // Horizontal rule
+                .replace(/^\-\-\-/gim, '<hr>')
+                // Paragraphs
+                .replace(/\n\n/g, '</p><p>')
+                // Line breaks
+                .replace(/\n/g, '<br>');
+            
+            // Wrap in paragraph if not already wrapped
+            if (!html.startsWith('<h') && !html.startsWith('<ul') && !html.startsWith('<ol')) {
+                html = '<p>' + html + '</p>';
+            }
+            
+            // Fix list wrapping
+            html = html.replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>');
+            
+            return html;
+        }
+
         const agents = [
             { id: 'coordinator', name: 'Coordinator', emoji: '🎯', role: 'Orchestrates team workflow', status: 'idle', tasks: 24, tokens: '45K', color: 'coordinator' },
             { id: 'researcher', name: 'Researcher', emoji: '🔬', role: 'Keyword & competitor analysis', status: 'idle', tasks: 18, tokens: '38K', color: 'researcher' },
@@ -579,9 +689,129 @@
         ];
 
         const fileContents = {
-            'client-brief': '# Premier Oral \u0026 Implant Surgery\\n\\nDr. Firas Ali - Board Certified Oral Surgeon\\n19,000+ anesthesia cases | 17,000+ wisdom teeth | 100,000+ extractions',
-            'landing-pages': '# Wave 1 Landing Pages\\n\\n6 SEO-optimized pages for dental implant keywords',
-            'tiktech-analysis': '# TikTech Competitive Analysis\\n\\nLocal computer repair competitor research'
+            'client-brief': `# Premier Oral & Implant Surgery - Client Brief
+
+## Practice Information
+
+**Practice Name:** Premier Oral, Facial & Implant Surgery  
+**Location:** Ashburn, VA  
+**Phone:** 571-291-3244  
+**Website:** https://premieroralimplantsurgery.com
+
+## Dr. Firas Ali - Credentials
+
+**Education:**
+- Doctorates in Dental Medicine from Tufts University School of Dental Medicine, Boston, MA
+- Residency: Oral and Maxillofacial Surgery at Loyola University Medical Center, Maywood, IL
+- Rotations at Harvard University/Massachusetts General Hospital
+
+**Board Certifications:**
+- Diplomate of the American Board of Oral & Maxillofacial Surgeons
+- Board Certified by the North East Regional Board of Dental Examiners
+- Fellow of the American Association of Oral & Maxillofacial Surgeons
+- Surgical Fellowship from Misch International Implant Institute
+
+**Experience Highlights:**
+- 19,000+ in-office General Anesthesia cases
+- 17,000+ Impacted Wisdom tooth extractions
+- 100,000+ Regular tooth extractions
+- Thousands of Dental Implants and Bone Grafting procedures
+
+## Services Offered
+
+1. General Anesthesia & IV Sedation
+2. Dental Implants
+3. Wisdom Teeth Extraction
+4. All-on-4 Dental Implants
+5. Teeth in a Day
+6. Bone Grafting and Augmentation
+7. Sinus Elevation
+8. Tooth Extraction
+9. Botox Cosmetic
+10. Jaw & Facial Surgery
+
+## Wave 1 Target Keywords
+
+- dental implants ashburn va (110/mo)
+- oral surgeon ashburn va (90/mo)
+- wisdom teeth removal ashburn va (70/mo)
+- all-on-4 dental implants ashburn (50/mo)
+- oral surgery ashburn va (50/mo)
+- tooth extraction ashburn va (40/mo)`,
+
+            'wave1-landing-pages': `# Wave 1 Landing Pages - Premier Oral & Implant Surgery
+
+## Page 1: Dental Implants Ashburn VA
+
+**URL:** /dental-implants-ashburn-va  
+**Target Keyword:** Dental Implants Ashburn VA (110/mo searches)
+
+**Meta Title:** Dental Implants Ashburn VA | Premier Oral & Implant Surgery | Dr. Firas Ali
+
+**Meta Description:** Looking for dental implants in Ashburn, VA? Dr. Firas Ali has placed thousands of implants. Misch International fellowship. Call 571-291-3244 today.
+
+---
+
+# Dental Implants Ashburn VA
+
+Missing teeth affect your confidence, your ability to eat, and your overall health. If you're searching for dental implants in Ashburn, VA, you want a surgeon with proven results and advanced training. Call 571-291-3244 today to schedule your consultation with Dr. Firas Ali.
+
+## Why Choose Dr. Ali for Dental Implants?
+
+- **Misch International Implant Institute Fellowship** – Advanced training in implantology
+- **Thousands of Successful Implant Cases** – Extensive experience
+- **Board Certified Oral & Maxillofacial Surgeon** – Hospital-affiliated
+
+## The Dental Implant Procedure
+
+Dental implants are titanium posts surgically placed into your jawbone to replace missing tooth roots. Dr. Ali uses 3D imaging and surgical planning to ensure precise placement.
+
+## Sedation Options Available
+
+- **IV Sedation** – Sleep through your procedure
+- **General Anesthesia** – For complex cases
+- **Nitrous Oxide** – Light relaxation
+
+## Recovery & Aftercare
+
+Most patients return to normal activities within 24-48 hours.
+
+---
+
+## Page 2: Oral Surgeon Ashburn VA
+
+**URL:** /oral-surgeon-ashburn-va  
+**Target Keyword:** Oral Surgeon Ashburn VA (90/mo searches)
+
+**Meta Title:** Oral Surgeon Ashburn VA | Dr. Firas Ali | Board Certified
+
+---
+
+[Additional pages: Wisdom Teeth, All-on-4, Oral Surgery, Tooth Extraction]`,
+
+            'tiktech-analysis': `# TikTech.net SEO Competitive Analysis Report
+
+## Executive Summary
+
+TikTech Services is a local computer repair business in Ashburn, VA.
+
+**Key Findings:**
+- 24/7 availability (rare competitive advantage)
+- Same-day repair service
+- Strong customer reviews (4-5 stars)
+
+**Major Opportunities They're Missing:**
+1. "Near me" keywords (823K searches/mo)
+2. Brand-specific repairs (Dell, HP, Lenovo)
+3. Video content / YouTube presence
+4. Pricing transparency
+5. Surrounding cities coverage
+
+**Recommendations:**
+- Expand local keyword targeting
+- Increase review volume
+- Add pricing content
+- Launch video content strategy`
         };
 
         let currentFileContent = '';
@@ -673,7 +903,7 @@
             const content = fileContents[contentKey] || 'File content not available';
             currentFileContent = content;
             document.getElementById('fileViewerTitle').textContent = filename;
-            document.getElementById('fileContent').textContent = content;
+            document.getElementById('fileContent').innerHTML = markdownToHtml(content);
             document.getElementById('fileViewer').classList.add('active');
         }
 
@@ -681,7 +911,7 @@
         function closeFileViewer() { document.getElementById('fileViewer').classList.remove('active'); }
 
         function copyFileContent() {
-            navigator.clipboard.writeText(currentFileContent).then(() => alert('Copied!'));
+            navigator.clipboard.writeText(currentFileContent).then(() => alert('Copied as Markdown!'));
         }
 
         function showTab(tab) {
