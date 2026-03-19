@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMMC Compliance Platform | MSP Toolkit</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e40af;
+            --primary-light: #3b82f6;
+            --secondary: #0f766e;
+            --accent: #dc2626;
+            --success: #16a34a;
+            --warning: #ca8a04;
+            --dark: #0f172a;
+            --dark-light: #1e293b;
+            --gray: #64748b;
+            --light: #f8fafc;
+            --border: #e2e8f0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: var(--dark);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .nav-tab {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .nav-tab:hover {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .nav-tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Dashboard Overview */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .stat-value.success { color: var(--success); }
+        .stat-value.warning { color: var(--warning); }
+        .stat-value.danger { color: var(--accent); }
+
+        .progress-bar {
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            margin-top: 0.75rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+
+        .progress-fill.success { background: var(--success); }
+        .progress-fill.warning { background: var(--warning); }
+        .progress-fill.danger { background: var(--accent); }
+
+        /* Cards */
+        .card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        /* Gap Assessment */
+        .assessment-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .question-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .question-number {
+            font-size: 0.75rem;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option:hover {
+            border-color: var(--primary);
+            background: rgba(30, 64, 175, 0.05);
+        }
+
+        .option.selected {
+            border-color: var(--primary);
+            background: rgba(30, 64, 175, 0.1);
+        }
+
+        .option input {
+            width: 18px;
+            height: 18px;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-light);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-outline {
+            background: white;
+            border: 1px solid var(--border);
+            color: var(--dark);
+        }
+
+        /* Control Tracker */
+        .controls-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .controls-table th,
+        .controls-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .controls-table th {
+            background: var(--dark);
+            color: white;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .controls-table tr:hover {
+            background: rgba(30, 64, 175, 0.03);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-not-started { background: #fee2e2; color: #991b1b; }
+        .status-in-progress { background: #fef3c7; color: #92400e; }
+        .status-implemented { background: #dbeafe; color: #1e40af; }
+        .status-validated { background: #d1fae5; color: #065f46; }
+
+        .priority-high { color: var(--accent); font-weight: 600; }
+        .priority-medium { color: var(--warning); font-weight: 600; }
+        .priority-low { color: var(--success); font-weight: 600; }
+
+        /* Policy Generator */
+        .policy-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .policy-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .policy-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .policy-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(30, 64, 175, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .policy-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .policy-desc {
+            font-size: 0.875rem;
+            color: var(--gray);
+        }
+
+        /* Evidence Collector */
+        .evidence-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        .evidence-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+
+        .evidence-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .evidence-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .evidence-count {
+            background: var(--primary);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+        }
+
+        .evidence-items {
+            list-style: none;
+        }
+
+        .evidence-items li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0;
+            font-size: 0.875rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .evidence-items li:last-child {
+            border-bottom: none;
+        }
+
+        .check-icon {
+            color: var(--success);
+        }
+
+        .missing-icon {
+            color: var(--gray);
+        }
+
+        /* Report Preview */
+        .report-preview {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .report-header {
+            text-align: center;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .report-logo {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .report-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .report-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .report-section-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+            color: var(--dark);
+        }
+
+        .recommendation-item {
+            background: #f8fafc;
+            border-left: 3px solid var(--primary);
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .recommendation-priority {
+            display: inline-block;
+            padding: 0.125rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .priority-critical {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .priority-high {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 1.25rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            padding: 1.25rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.95rem;
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .policy-list { grid-template-columns: 1fr; }
+            .evidence-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid { grid-template-columns: 1fr; }
+            .nav-tabs { display: none; }
+            .evidence-grid { grid-template-columns: 1fr; }
+            .container { padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">🔒</div>
+            CMMC Compliance Platform
+        </div>
+        <nav class="nav-tabs">
+            <div class="nav-tab active" onclick="showTab('dashboard')">Dashboard</div>
+            <div class="nav-tab" onclick="showTab('assessment')">Gap Assessment</div>
+            <div class="nav-tab" onclick="showTab('controls')">Control Tracker</div>
+            <div class="nav-tab" onclick="showTab('policies')">Policy Generator</div>
+            <div class="nav-tab" onclick="showTab('evidence')">Evidence</div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="tab-content active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Overall Compliance</div>
+                    <div class="stat-value warning">34%</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill warning" style="width: 34%"></div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Controls Implemented</div>
+                    <div class="stat-value">37/110</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 34%"></div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Critical Gaps</div>
+                    <div class="stat-value danger">23</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill danger" style="width: 21%"></div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Days to Assessment</div>
+                    <div class="stat-value success">87</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill success" style="width: 65%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">CMMC Level 2 Readiness</div>
+                    <button class="btn btn-primary" onclick="showTab('assessment')">Start Assessment</button>
+                </div>
+                <p style="color: var(--gray); margin-bottom: 1rem;">Your organization is currently at <strong>Level 1 (Foundational)</strong>. Complete the gap assessment to get a detailed roadmap to CMMC Level 2 certification.</p>
+                
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1.5rem;">
+                    <div style="text-align: center; padding: 1rem; background: #f8fafc; border-radius: 8px;">
+                        <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">📋</div>
+                        <div style="font-weight: 600;">Gap Assessment</div>
+                        <div style="font-size: 0.875rem; color: var(--gray);">Not Started</div>
+                    </div>
+                    <div style="text-align: center; padding: 1rem; background: #f8fafc; border-radius: 8px;">
+                        <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">⚙️</div>
+                        <div style="font-weight: 600;">Implementation</div>
+                        <div style="font-size: 0.875rem; color: var(--gray);">In Progress</div>
+                    </div>
+                    <div style="text-align: center; padding: 1rem; background: #f8fafc; border-radius: 8px;">
+                        <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">✅</div>
+                        <div style="font-weight: 600;">Assessment</div>
+                        <div style="font-size: 0.875rem; color: var(--gray);">Scheduled</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Priority Actions</div>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        <div style="display: flex; align-items: center; gap: 1rem; padding: 0.75rem; background: #fee2e2; border-radius: 8px;">
+                            <span style="background: #dc2626; color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">CRITICAL</span>
+                            <span>Complete Access Control policies (AC-1, AC-2, AC-3)</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 1rem; padding: 0.75rem; background: #fef3c7; border-radius: 8px;">
+                            <span style="background: #d97706; color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">HIGH</span>
+                            <span>Implement multi-factor authentication (IA-2)</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 1rem; padding: 0.75rem; background: #dbeafe; border-radius: 8px;">
+                            <span style="background: #2563eb; color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">MEDIUM</span>
+                            <span>Document incident response procedures (IR-1)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Quick Links</div>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <button class="btn btn-outline" onclick="showTab('assessment')" style="text-align: left;">📋 Gap Assessment</button>
+                        <button class="btn btn-outline" onclick="showTab('controls')" style="text-align: left;">⚙️ Control Tracker</button>
+                        <button class="btn btn-outline" onclick="showTab('policies')" style="text-align: left;">📄 Policy Generator</button>
+                        <button class="btn btn-outline" onclick="showTab('evidence')" style="text-align: left;">📁 Evidence Collector</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gap Assessment Tab -->
+        <div id="assessment" class="tab-content">
+            <div class="assessment-container">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">CMMC Level 2 Gap Assessment</div>
+                        <span>Question 1 of 20</span>
+                    </div>
+                    
+                    <div id="assessment-questions">
+                        <!-- Questions will be loaded here -->
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; margin-top: 1.5rem;">
+                        <button class="btn btn-outline" onclick="previousQuestion()">← Previous</button>
+                        <button class="btn btn-primary" onclick="nextQuestion()">Next →</button>
+                    </div>
+                </div>
+
+                <div id="assessment-results" style="display: none;">
+                    <div class="report-preview">
+                        <div class="report-header">
+                            <div class="report-logo">🔒</div>
+                            <div class="report-title">CMMC Gap Assessment Report</div>
+                            <div style="color: var(--gray);">Generated on March 1, 2026</div>
+                        </div>
+
+                        <div class="report-section">
+                            <div class="report-section-title">Executive Summary</div>
+                            <p>Your organization currently meets <strong>34% (37 of 110)</strong> of CMMC Level 2 requirements. Based on the assessment, you are at <strong>Level 1 (Foundational)</strong> compliance.</p>
+                            
+                            <p><strong>Estimated timeline to Level 2:</strong> 4-6 months</p>
+                            <p><strong>Estimated investment:</strong> $15,000 - $25,000</p>
+                        </div>
+
+                        <div class="report-section">
+                            <div class="report-section-title">Critical Recommendations</div>
+                            
+                            <div class="recommendation-item">
+                                <span class="recommendation-priority priority-critical">CRITICAL</span>
+                                <div style="font-weight: 600; margin-bottom: 0.25rem;">Implement Access Control Policies</div>
+                                <div style="font-size: 0.9rem; color: var(--gray);">Establish formal access control procedures including least privilege, separation of duties, and account management. Required for AC-1, AC-2, AC-3.</div>
+                            </div>
+
+                            <div class="recommendation-item">
+                                <span class="recommendation-priority priority-critical">CRITICAL</span>
+                                <div style="font-weight: 600; margin-bottom: 0.25rem;">Deploy Multi-Factor Authentication</div>
+                                <div style="font-size: 0.9rem; color: var(--gray);">Implement MFA for all privileged accounts and network access. Critical for IA-2 and SC-12.</div>
+                            </div>
+
+                            <div class="recommendation-item">
+                                <span class="recommendation-priority priority-high">HIGH</span>
+                                <div style="font-weight: 600; margin-bottom: 0.25rem;">Establish Audit & Accountability</div>
+                                <div style="font-size: 0.9rem; color: var(--gray);">Implement audit logging for all systems handling CUI. Required for AU-1 through AU-12.</div>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-success" onclick="downloadReport()" style="width: 100%;">📥 Download Full Report</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Control Tracker Tab -->
+        <div id="controls" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">CMMC Level 2 Control Tracker (110 Controls)</div>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button class="btn btn-outline">Filter</button>
+                        <button class="btn btn-primary">+ Add Control</button>
+                    </div>
+                </div>
+
+                <div style="overflow-x: auto;">
+                    <table class="controls-table">
+                        <thead>
+                            <tr>
+                                <th>Control ID</th>
+                                <th>Name</th>
+                                <th>Domain</th>
+                                <th>Status</th>
+                                <th>Priority</th>
+                                <th>Assigned</th>
+                                <th>Due Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>AC-1</strong></td>
+                                <td>Access Control Policy & Procedures</td>
+                                <td>Access Control</td>
+                                <td><span class="status-badge status-in-progress">In Progress</span></td>
+                                <td><span class="priority-high">High</span></td>
+                                <td>John Smith</td>
+                                <td>Mar 15, 2026</td>
+                            </tr>
+                            <tr>
+                                <td><strong>AC-2</strong></td>
+                                <td>Account Management</td>
+                                <td>Access Control</td>
+                                <td><span class="status-badge status-not-started">Not Started</span></td>
+                                <td><span class="priority-high">High</span></td>
+                                <td>—</td>
+                                <td>Mar 30, 2026</td>
+                            </tr>
+                            <tr>
+                                <td><strong>AC-3</strong></td>
+                                <td>Access Enforcement</td>
+                                <td>Access Control</td>
+                                <td><span class="status-badge status-implemented">Implemented</span></td>
+                                <td><span class="priority-high">High</span></td>
+                                <td>Sarah Johnson</td>
+                                <td>Mar 10, 2026</td>
+                            </tr>
+                            <tr>
+                                <td><strong>IA-2</strong></td>
+                                <td>Identification & Authentication</td>
+                                <td>Identification & Authentication</td>
+                                <td><span class="status-badge status-in-progress">In Progress</span></td>
+                                <td><span class="priority-high">High</span></td>
+                                <td>Mike Chen</td>
+                                <td>Mar 20, 2026</td>
+                            </tr>
+                            <tr>
+                                <td><strong>AU-1</strong></td>
+                                <td>Audit & Accountability Policy</td>
+                                <td>Audit & Accountability</td>
+                                <td><span class="status-badge status-not-started">Not Started</span></td>
+                                <td><span class="priority-medium">Medium</span></td>
+                                <td>—</td>
+                                <td>Apr 5, 2026</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Policy Generator Tab -->
+        <div id="policies" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Policy & Procedure Generator</div>
+                    <button class="btn btn-outline">📋 View All Templates</button>
+                </div>
+                
+                <p style="color: var(--gray); margin-bottom: 1.5rem;">Generate CMMC-compliant policies customized for your organization. All templates are based on NIST 800-171 and CMMC 2.0 requirements.</p>
+
+                <div class="policy-list">
+                    <div class="policy-card" onclick="generatePolicy('access-control')">
+                        <div class="policy-icon">🔐</div>
+                        <div class="policy-title">Access Control Policy</div>
+                        <div class="policy-desc">AC-1: Establishes procedures for granting, modifying, and revoking access to systems and data.</div>
+                    </div>
+
+                    <div class="policy-card" onclick="generatePolicy('incident-response')">
+                        <div class="policy-icon">🚨</div>
+                        <div class="policy-title">Incident Response Plan</div>
+                        <div class="policy-desc">IR-1 through IR-8: Procedures for detecting, reporting, and responding to security incidents.</div>
+                    </div>
+
+                    <div class="policy-card" onclick="generatePolicy('risk-assessment')">
+                        <div class="policy-icon">⚠️</div>
+                        <div class="policy-title">Risk Assessment Procedure</div>
+                        <div class="policy-desc">RA-1 through RA-3: Framework for identifying, assessing, and mitigating organizational risks.</div>
+                    </div>
+
+                    <div class="policy-card" onclick="generatePolicy('system-security')">
+                        <div class="policy-icon">🛡️</div>
+                        <div class="policy-title">System Security Plan (SSP)</div>
+                        <div class="policy-desc">Comprehensive document describing security controls and implementation for your systems.</div>
+                    </div>
+
+                    <div class="policy-card" onclick="generatePolicy('configuration')">
+                        <div class="policy-icon">⚙️</div>
+                        <div class="policy-title">Configuration Management Plan</div>
+                        <div class="policy-desc">CM-1 through CM-6: Baseline configurations, change control, and security settings.</div>
+                    </div>
+
+                    <div class="policy-card" onclick="generatePolicy('acceptable-use')">
+                        <div class="policy-icon">📋</div>
+                        <div class="policy-title">Acceptable Use Policy</div>
+                        <div class="policy-desc">Defines acceptable use of organizational systems, data handling, and user responsibilities.</div>
+                    </div>
+
+                    <div class="policy-card" onclick="generatePolicy('contingency')">
+                        <div class="policy-icon">💾</div>
+                        <div class="policy-title">Contingency Plan</div>
+                        <div class="policy-desc">CP-1 through CP-4: Backup, recovery, and business continuity procedures for critical systems.</div>
+                    </div>
+
+                    <div class="policy-card" onclick="generatePolicy('maintenance')">
+                        <div class="policy-icon">🔧</div>
+                        <div class="policy-title">Maintenance Policy</div>
+                        <div class="policy-desc">MA-1 through MA-6: System maintenance procedures, remote maintenance, and tool security.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Evidence Collector Tab -->
+        <div id="evidence" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Evidence Collector for C3PAO Assessment</div>
+                    <button class="btn btn-primary">📦 Export All Evidence</button>
+                </div>
+                
+                <p style="color: var(--gray); margin-bottom: 1.5rem;">Organize and track evidence required for your CMMC assessment. Each artifact should be documented with location, date, and responsible party.</p>
+
+                <div class="evidence-grid">
+                    <div class="evidence-card">
+                        <div class="evidence-header">
+                            <span class="evidence-title">📋 Policies & Procedures</span>
+                            <span class="evidence-count">5/8</span>
+                        </div>
+                        <ul class="evidence-items">
+                            <li><span class="check-icon">✓</span> Access Control Policy</li>
+                            <li><span class="check-icon">✓</span> Incident Response Plan</li>
+                            <li><span class="check-icon">✓</span> Risk Assessment</li>
+                            <li><span class="check-icon">✓</span> System Security Plan</li>
+                            <li><span class="check-icon">✓</span> Acceptable Use Policy</li>
+                            <li><span class="missing-icon">○</span> Configuration Mgmt Plan</li>
+                            <li><span class="missing-icon">○</span> Contingency Plan</li>
+                            <li><span class="missing-icon">○</span> Maintenance Policy</li>
+                        </ul>
+                    </div>
+
+                    <div class="evidence-card">
+                        <div class="evidence-header">
+                            <span class="evidence-title">👥 Access Control</span>
+                            <span class="evidence-count">3/6</span>
+                        </div>
+                        <ul class="evidence-items">
+                            <li><span class="check-icon">✓</span> User access matrix</li>
+                            <li><span class="check-icon">✓</span> Privileged account list</li>
+                            <li><span class="check-icon">✓</span> Access review logs</li>
+                            <li><span class="missing-icon">○</span> Termination procedures</li>
+                            <li><span class="missing-icon">○</span> Network diagrams</li>
+                            <li><span class="missing-icon">○</span> Remote access logs</li>
+                        </ul>
+                    </div>
+
+                    <div class="evidence-card">
+                        <div class="evidence-header">
+                            <span class="evidence-title">📊 Audit & Logs</span>
+                            <span class="evidence-count">2/5</span>
+                        </div>
+                        <ul class="evidence-items">
+                            <li><span class="check-icon">✓</span> Audit policy document</li>
+                            <li><span class="check-icon">✓</span> Sample audit logs</li>
+                            <li><span class="missing-icon">○</span> Log retention config</li>
+                            <li><span class="missing-icon">○</span> Audit review records</li>
+                            <li><span class="missing-icon">○</span> Time synchronization</li>
+                        </ul>
+                    </div>
+
+                    <div class="evidence-card">
+                        <div class="evidence-header">
+                            <span class="evidence-title">🔐 Authentication</span>
+                            <span class="evidence-count">2/4</span>
+                        </div>
+                        <ul class="evidence-items">
+                            <li><span class="check-icon">✓</span> MFA configuration</li>
+                            <li><span class="check-icon">✓</span> Password policy</li>
+                            <li><span class="missing-icon">○</span> PKI certificates</li>
+                            <li><span class="missing-icon">○</span> Session timeout settings</li>
+                        </ul>
+                    </div>
+
+                    <div class="evidence-card">
+                        <div class="evidence-header">
+                            <span class="evidence-title">💾 Media Protection</span>
+                            <span class="evidence-count">1/4</span>
+                        </div>
+                        <ul class="evidence-items">
+                            <li><span class="check-icon">✓</span> Media handling policy</li>
+                            <li><span class="missing-icon">○</span> Encryption standards</li>
+                            <li><span class="missing-icon">○</span> Sanitization procedures</li>
+                            <li><span class="missing-icon">○</span> Physical media logs</li>
+                        </ul>
+                    </div>
+
+                    <div class="evidence-card">
+                        <div class="evidence-header">
+                            <span class="evidence-title">🛡️ System Protection</span>
+                            <span class="evidence-count">2/6</span>
+                        </div>
+                        <ul class="evidence-items">
+                            <li><span class="check-icon">✓</span> Baseline configurations</li>
+                            <li><span class="check-icon">✓</span> Patch management records</li>
+                            <li><span class="missing-icon">○</span> Malware protection config</li>
+                            <li><span class="missing-icon">○</span> Firewall rules</li>
+                            <li><span class="missing-icon">○</span> Mobile device policy</li>
+                            <li><span class="missing-icon">○</span> Software inventory</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Policy Generator Modal -->
+    <div class="modal" id="policyModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Generate Policy</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Organization Name</label>
+                    <input type="text" class="form-input" id="orgName" placeholder="Your Company Name">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Responsible Official</label>
+                    <input type="text" class="form-input" id="responsibleOfficial" placeholder="Name and Title">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Effective Date</label>
+                    <input type="date" class="form-input" id="effectiveDate">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Additional Notes</label>
+                    <textarea class="form-input form-textarea" id="policyNotes" placeholder="Any specific requirements or context..."></textarea>
+                </div>
+                
+                <button class="btn btn-success" onclick="generatePolicyDocument()" style="width: 100%;">Generate Policy Document</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Assessment questions
+        const questions = [
+            {
+                id: 1,
+                text: "Does your organization have documented access control policies and procedures?",
+                controls: ["AC-1"],
+                options: ["Yes, fully documented and approved", "Partially documented", "In development", "No"]
+            },
+            {
+                id: 2,
+                text: "Are user accounts individually identified and authenticated before system access?",
+                controls: ["IA-2", "IA-3"],
+                options: ["Yes, all users", "Yes, but some shared accounts exist", "Only for privileged users", "No"]
+            },
+            {
+                id: 3,
+                text: "Is multi-factor authentication (MFA) required for privileged accounts?",
+                controls: ["IA-2(1)"],
+                options: ["Yes, enforced for all privileged accounts", "Yes, but not enforced", "Planned implementation", "No"]
+            },
+            {
+                id: 4,
+                text: "Does your organization conduct regular security awareness training?",
+                controls: ["AT-1", "AT-2"],
+                options: ["Yes, annually with phishing tests", "Yes, but no testing", "Irregular training", "No"]
+            },
+            {
+                id: 5,
+                text: "Are audit logs maintained for all systems processing CUI?",
+                controls: ["AU-1", "AU-2", "AU-3"],
+                options: ["Yes, centralized and reviewed", "Yes, but not reviewed", "Partial coverage", "No"]
+            }
+        ];
+
+        let currentQuestion = 0;
+        let answers = [];
+
+        function renderQuestion() {
+            const q = questions[currentQuestion];
+            const container = document.getElementById('assessment-questions');
+            
+            container.innerHTML = `
+                <div class="question-card">
+                    <div class="question-number">Question ${currentQuestion + 1} of ${questions.length} | Controls: ${q.controls.join(', ')}</div>
+                    <div class="question-text">${q.text}</div>
+                    <div class="options">
+                        ${q.options.map((opt, i) => `
+                            <div class="option ${answers[currentQuestion] === i ? 'selected' : ''}" onclick="selectOption(${i})">
+                                <input type="radio" name="q${q.id}" ${answers[currentQuestion] === i ? 'checked' : ''}>
+                                <span>${opt}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function selectOption(index) {
+            answers[currentQuestion] = index;
+            renderQuestion();
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                renderQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                renderQuestion();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('assessment-questions').style.display = 'none';
+            document.getElementById('assessment-results').style.display = 'block';
+        }
+
+        function downloadReport() {
+            alert('Report download functionality would generate a PDF here.');
+        }
+
+        // Policy Generator
+        function generatePolicy(policyType) {
+            document.getElementById('policyModal').classList.add('active');
+            document.getElementById('modalTitle').textContent = 'Generate ' + policyType.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase()) + ' Policy';
+        }
+
+        function closeModal() {
+            document.getElementById('policyModal').classList.remove('active');
+        }
+
+        function generatePolicyDocument() {
+            const orgName = document.getElementById('orgName').value || 'Your Organization';
+            alert(`Policy document for ${orgName} would be generated and downloaded here.`);
+            closeModal();
+        }
+
+        // Initialize
+        renderQuestion();
+
+        // Close modal on outside click
+        document.getElementById('policyModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+    </script>
+</body>
+</html>
