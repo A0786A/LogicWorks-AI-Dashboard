@@ -684,31 +684,17 @@
 
                         <div class="report-section">
                             <div class="report-section-title">Executive Summary</div>
-                            <p>Your organization currently meets <strong>34% (37 of 110)</strong> of CMMC Level 2 requirements. Based on the assessment, you are at <strong>Level 1 (Foundational)</strong> compliance.</p>
+                            <p>Your organization currently meets <strong id="reportPercentage">34%</strong> (<span id="reportControlsMet">37</span> of 110) of CMMC Level 2 requirements. Based on the assessment, you are at <strong id="reportComplianceLevel">Level 1 (Foundational)</strong> compliance.</p>
                             
-                            <p><strong>Estimated timeline to Level 2:</strong> 4-6 months</p>
+                            <p><strong>Questions Answered:</strong> <span id="reportQuestionsAnswered">0</span> of 136</p>
+                            <p><strong>Estimated timeline to Level 2:</strong> <span id="reportTimeline">4-6 months</span></p>
                             <p><strong>Estimated investment:</strong> $15,000 - $25,000</p>
                         </div>
 
                         <div class="report-section">
                             <div class="report-section-title">Critical Recommendations</div>
-                            
-                            <div class="recommendation-item">
-                                <span class="recommendation-priority priority-critical">CRITICAL</span>
-                                <div style="font-weight: 600; margin-bottom: 0.25rem;">Implement Access Control Policies</div>
-                                <div style="font-size: 0.9rem; color: var(--gray);">Establish formal access control procedures including least privilege, separation of duties, and account management. Required for AC-1, AC-2, AC-3.</div>
-                            </div>
-
-                            <div class="recommendation-item">
-                                <span class="recommendation-priority priority-critical">CRITICAL</span>
-                                <div style="font-weight: 600; margin-bottom: 0.25rem;">Deploy Multi-Factor Authentication</div>
-                                <div style="font-size: 0.9rem; color: var(--gray);">Implement MFA for all privileged accounts and network access. Critical for IA-2 and SC-12.</div>
-                            </div>
-
-                            <div class="recommendation-item">
-                                <span class="recommendation-priority priority-high">HIGH</span>
-                                <div style="font-weight: 600; margin-bottom: 0.25rem;">Establish Audit & Accountability</div>
-                                <div style="font-size: 0.9rem; color: var(--gray);">Implement audit logging for all systems handling CUI. Required for AU-1 through AU-12.</div>
+                            <div id="reportRecommendations">
+                                <!-- Recommendations will be inserted here -->
                             </div>
                         </div>
 
@@ -1175,6 +1161,94 @@
         let currentQuestion = 0;
         let answers = [];
 
+        // Scoring weights for each answer option
+        const scoreWeights = {
+            0: 1.0,   // First option (Yes/Fully) = 100%
+            1: 0.6,   // Second option (Partially/Mostly) = 60%
+            2: 0.3,   // Third option (Some/In development) = 30%
+            3: 0.0    // Fourth option (No/Not) = 0%
+        };
+
+        function calculateScore() {
+            let totalScore = 0;
+            let answeredQuestions = 0;
+            
+            answers.forEach((answerIndex, questionIndex) => {
+                if (answerIndex !== undefined) {
+                    totalScore += scoreWeights[answerIndex];
+                    answeredQuestions++;
+                }
+            });
+            
+            const percentage = answeredQuestions > 0 ? Math.round((totalScore / answeredQuestions) * 100) : 0;
+            const controlsMet = Math.round((percentage / 100) * 110);
+            
+            return {
+                percentage,
+                controlsMet,
+                answeredQuestions,
+                totalQuestions: questions.length
+            };
+        }
+
+        function getComplianceLevel(percentage) {
+            if (percentage >= 80) return { level: 2, name: "Level 2 (Advanced)", color: "success" };
+            if (percentage >= 60) return { level: 1, name: "Level 1 (Foundational)", color: "warning" };
+            return { level: 0, name: "Not Compliant", color: "danger" };
+        }
+
+        function getRecommendations() {
+            const recommendations = [];
+            
+            // Check specific critical controls
+            if (answers[0] >= 2) { // AC-1
+                recommendations.push({
+                    priority: "CRITICAL",
+                    title: "Implement Access Control Policies",
+                    description: "Establish formal access control procedures including least privilege, separation of duties, and account management.",
+                    controls: ["AC-1", "AC-2", "AC-3"]
+                });
+            }
+            
+            if (answers[2] >= 2) { // IA-2(1) MFA
+                recommendations.push({
+                    priority: "CRITICAL",
+                    title: "Deploy Multi-Factor Authentication",
+                    description: "Implement MFA for all privileged accounts and network access.",
+                    controls: ["IA-2(1)", "IA-2", "SC-12"]
+                });
+            }
+            
+            if (answers[22] >= 2) { // AU-1
+                recommendations.push({
+                    priority: "HIGH",
+                    title: "Establish Audit & Accountability",
+                    description: "Implement audit logging for all systems handling CUI.",
+                    controls: ["AU-1", "AU-2", "AU-3"]
+                });
+            }
+            
+            if (answers[118] >= 2) { // SC-8 encryption
+                recommendations.push({
+                    priority: "HIGH",
+                    title: "Implement Encryption for CUI",
+                    description: "Encrypt CUI during transmission and storage.",
+                    controls: ["SC-8", "SC-28"]
+                });
+            }
+            
+            if (answers[69] >= 2) { // IR-1
+                recommendations.push({
+                    priority: "HIGH",
+                    title: "Develop Incident Response Plan",
+                    description: "Create and document incident response procedures.",
+                    controls: ["IR-1", "IR-2", "IR-3"]
+                });
+            }
+            
+            return recommendations;
+        }
+
         function renderQuestion() {
             const q = questions[currentQuestion];
             const container = document.getElementById('assessment-questions');
@@ -1223,7 +1297,37 @@
         }
 
         function showResults() {
+            const score = calculateScore();
+            const compliance = getComplianceLevel(score.percentage);
+            const recommendations = getRecommendations();
+            
+            // Update report with calculated values
+            document.getElementById('reportPercentage').textContent = score.percentage + '%';
+            document.getElementById('reportControlsMet').textContent = score.controlsMet;
+            document.getElementById('reportComplianceLevel').textContent = compliance.name;
+            document.getElementById('reportQuestionsAnswered').textContent = score.answeredQuestions;
+            
+            // Color code the percentage
+            const percentageEl = document.getElementById('reportPercentage');
+            percentageEl.className = 'stat-value ' + compliance.color;
+            
+            // Generate recommendations HTML
+            const recsContainer = document.getElementById('reportRecommendations');
+            if (recommendations.length > 0) {
+                recsContainer.innerHTML = recommendations.map(rec => `
+                    <div class="recommendation-item">
+                        <span class="recommendation-priority priority-${rec.priority.toLowerCase()}">${rec.priority}</span>
+                        <div style="font-weight: 600; margin-bottom: 0.25rem;">${rec.title}</div>
+                        <div style="font-size: 0.9rem; color: var(--gray); margin-bottom: 0.5rem;">${rec.description}</div>
+                        <div style="font-size: 0.8rem; color: var(--primary);">Controls: ${rec.controls.join(', ')}</div>
+                    </div>
+                `).join('');
+            } else {
+                recsContainer.innerHTML = '<p style="color: var(--success);">✓ No critical gaps identified. Continue maintaining current controls.</p>';
+            }
+            
             document.getElementById('assessment-questions').style.display = 'none';
+            document.querySelector('.assessment-container .card').style.display = 'none';
             document.getElementById('assessment-results').style.display = 'block';
         }
 
@@ -1243,8 +1347,423 @@
 
         function generatePolicyDocument() {
             const orgName = document.getElementById('orgName').value || 'Your Organization';
-            alert(`Policy document for ${orgName} would be generated and downloaded here.`);
+            const official = document.getElementById('responsibleOfficial').value || 'Chief Information Security Officer';
+            const date = document.getElementById('effectiveDate').value || new Date().toISOString().split('T')[0];
+            const policyType = document.getElementById('modalTitle').textContent.replace('Generate ', '').replace(' Policy', '').toLowerCase().replace(/ /g, '-');
+            
+            // Policy templates
+            const templates = {
+                'access-control': generateAccessControlPolicy,
+                'incident-response': generateIncidentResponsePlan,
+                'system-security': generateSystemSecurityPlan,
+                'risk-assessment': generateRiskAssessmentProcedure,
+                'configuration': generateConfigurationManagementPlan,
+                'acceptable-use': generateAcceptableUsePolicy,
+                'contingency': generateContingencyPlan,
+                'maintenance': generateMaintenancePolicy
+            };
+            
+            const generator = templates[policyType] || generateGenericPolicy;
+            const content = generator(orgName, official, date);
+            
+            // Create and download file
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${policyType}-policy-${orgName.replace(/\s+/g, '-').toLowerCase()}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
             closeModal();
+        }
+
+        // Policy Template Generators
+        function generateAccessControlPolicy(orgName, official, date) {
+            return `${orgName.toUpperCase()}
+ACCESS CONTROL POLICY
+
+Version: 1.0
+Effective Date: ${date}
+Approved By: ${official}
+
+1. PURPOSE
+This policy establishes access control requirements for ${orgName} to ensure access to systems and data is granted based on least privilege and need-to-know principles.
+
+2. SCOPE
+Applies to all employees, contractors, and third-party users accessing ${orgName} information systems.
+
+3. POLICY REQUIREMENTS
+
+3.1 Account Management
+- All accounts individually identified and authenticated
+- No shared accounts (except emergency)
+- Management approval required for account changes
+- Quarterly access reviews mandatory
+
+3.2 Access Enforcement
+- Automated access controls for CUI
+- Role-based access control (RBAC) implemented
+- Separation of duties for critical functions
+
+3.3 Least Privilege
+- Minimum access necessary for job functions
+- Limited and monitored privileged accounts
+- Default accounts disabled or renamed
+
+3.4 Session Control
+- 15-minute inactivity timeout
+- Concurrent session limits enforced
+- MFA required for remote access
+
+4. COMPLIANCE
+Violations may result in disciplinary action up to termination.
+
+Approved: _________________ Date: _________________
+${official}`;
+        }
+
+        function generateIncidentResponsePlan(orgName, official, date) {
+            return `${orgName.toUpperCase()}
+INCIDENT RESPONSE PLAN
+
+Version: 1.0
+Effective Date: ${date}
+Approved By: ${official}
+
+1. PURPOSE
+Procedures for detecting, reporting, and responding to security incidents.
+
+2. INCIDENT RESPONSE TEAM
+- Incident Response Manager: Overall coordination
+- Technical Lead: Investigation and containment
+- Communications Lead: Internal/external communications
+
+3. INCIDENT CATEGORIES
+
+Category 1 - CRITICAL (Response: Immediate)
+- Active data breach
+- Ransomware attack
+- System compromise with CUI access
+
+Category 2 - HIGH (Response: Within 4 hours)
+- Malware detection
+- Unauthorized access attempt
+- Policy violation
+
+Category 3 - MEDIUM (Response: Within 24 hours)
+- Suspicious activity
+- Minor policy violation
+
+4. RESPONSE PROCEDURES
+1. Detection and Analysis
+2. Containment
+3. Eradication
+4. Recovery
+5. Post-Incident Activities
+
+5. REPORTING
+- Internal: Within 1 hour to IR Manager
+- External: As required by law
+- DoD: Within 72 hours for CUI incidents
+
+Emergency Contact: [INSERT NUMBER]
+IR Manager: [INSERT EMAIL]
+
+Approved: _________________ Date: _________________
+${official}`;
+        }
+
+        function generateSystemSecurityPlan(orgName, official, date) {
+            return `${orgName.toUpperCase()}
+SYSTEM SECURITY PLAN (SSP)
+
+For CMMC Level 2 Compliance
+Version: 1.0
+Date: ${date}
+Prepared By: ${official}
+
+1. SYSTEM IDENTIFICATION
+System Name: ${orgName} Information Systems
+System Owner: ${official}
+System Type: General Support System
+
+2. SYSTEM CATEGORIZATION
+Security Category: Moderate
+Confidentiality: Moderate
+Integrity: Moderate
+Availability: Moderate
+
+3. SECURITY CONTROLS SUMMARY
+
+Access Control (AC)
+- AC-1: Access Control Policy
+- AC-2: Account Management
+- AC-3: Access Enforcement
+- AC-17: Remote Access
+- AC-18: Wireless Access
+
+Audit and Accountability (AU)
+- AU-1: Audit Policy
+- AU-2: Auditable Events
+- AU-3: Audit Content
+- AU-6: Audit Review
+
+Identification and Authentication (IA)
+- IA-1: IA Policy
+- IA-2: Identification and Authentication
+- IA-2(1): MFA for Network Access
+- IA-2(2): MFA for Local Access
+
+System and Communications Protection (SC)
+- SC-1: SC Policy
+- SC-7: Boundary Protection
+- SC-8: Transmission Confidentiality
+- SC-28: Information at Rest
+
+4. RISK ASSESSMENT
+Last Assessment: ${date}
+Risk Level: Moderate
+
+System Owner: _________________ Date: _________________
+${official}`;
+        }
+
+        function generateRiskAssessmentProcedure(orgName, official, date) {
+            return `${orgName.toUpperCase()}
+RISK ASSESSMENT PROCEDURE
+
+Version: 1.0
+Effective Date: ${date}
+Approved By: ${official}
+
+1. PURPOSE
+Methodology for conducting risk assessments to identify and prioritize risks.
+
+2. RISK ASSESSMENT STEPS
+
+Step 1: System Characterization
+- Identify system boundaries
+- Document components
+- Identify data types (including CUI)
+
+Step 2: Threat Identification
+- Natural threats
+- Human threats
+- Environmental threats
+
+Step 3: Vulnerability Identification
+- Technical vulnerabilities
+- Operational vulnerabilities
+- Physical vulnerabilities
+
+Step 4: Risk Determination
+Risk = Likelihood × Impact
+
+Risk Levels:
+- Critical (20-25): Immediate action
+- High (15-19): Action within 30 days
+- Moderate (10-14): Action within 90 days
+- Low (5-9): Action within 180 days
+
+3. ROLES
+- Risk Assessment Team: Conduct assessments
+- System Owners: Provide system information
+- Management: Review and approve risk acceptance
+
+4. FREQUENCY
+Risk assessments conducted annually or when significant changes occur.
+
+Approved: _________________ Date: _________________
+${official}`;
+        }
+
+        function generateConfigurationManagementPlan(orgName, official, date) {
+            return `${orgName.toUpperCase()}
+CONFIGURATION MANAGEMENT PLAN
+
+Version: 1.0
+Effective Date: ${date}
+Approved By: ${official}
+
+1. PURPOSE
+Establish configuration management for ${orgName} information systems.
+
+2. BASELINE CONFIGURATIONS
+- Documented baseline configurations for all systems
+- Approved secure settings
+- Hardware and software inventory
+
+3. CHANGE CONTROL
+- Change request submission
+- Security impact analysis
+- Approval process
+- Implementation and verification
+
+4. CONFIGURATION MONITORING
+- Automated configuration monitoring
+- Drift detection
+- Remediation procedures
+
+5. RESTRICTED ACTIVITIES
+- Unauthorized software installation prohibited
+- Unapproved hardware connection prohibited
+- Baseline deviations require approval
+
+Approved: _________________ Date: _________________
+${official}`;
+        }
+
+        function generateAcceptableUsePolicy(orgName, official, date) {
+            return `${orgName.toUpperCase()}
+ACCEPTABLE USE POLICY
+
+Version: 1.0
+Effective Date: ${date}
+Approved By: ${official}
+
+1. PURPOSE
+Define acceptable use of ${orgName} information systems.
+
+2. SCOPE
+Applies to all users of ${orgName} systems and networks.
+
+3. ACCEPTABLE USE
+- Business-related activities
+- Authorized access only
+- Compliance with security policies
+- Protection of CUI
+
+4. PROHIBITED ACTIVITIES
+- Unauthorized access attempts
+- Malware introduction
+- Data exfiltration
+- Personal use exceeding minimal levels
+- Circumventing security controls
+
+5. MONITORING
+- System usage monitored
+- Violations investigated
+- Disciplinary action may result
+
+6. ACKNOWLEDGMENT
+Users must sign acknowledgment before system access.
+
+Approved: _________________ Date: _________________
+${official}`;
+        }
+
+        function generateContingencyPlan(orgName, official, date) {
+            return `${orgName.toUpperCase()}
+CONTINGENCY PLAN
+
+Version: 1.0
+Effective Date: ${date}
+Approved By: ${official}
+
+1. PURPOSE
+Procedures for system recovery and continuity of operations.
+
+2. BACKUP PROCEDURES
+- Daily incremental backups
+- Weekly full backups
+- Offsite storage required
+- Backup testing quarterly
+
+3. RECOVERY PROCEDURES
+- System restoration from backups
+- Verification of system integrity
+- Return to normal operations
+
+4. ALTERNATE PROCESSING
+- Alternate site identified
+- Failover procedures documented
+- Communication plan activated
+
+5. PLAN TESTING
+- Tabletop exercises: Semi-annually
+- Full tests: Annually
+- Plan updates after each test
+
+6. CONTACTS
+Primary: [INSERT NAME/NUMBER]
+Alternate: [INSERT NAME/NUMBER]
+
+Approved: _________________ Date: _________________
+${official}`;
+        }
+
+        function generateMaintenancePolicy(orgName, official, date) {
+            return `${orgName.toUpperCase()}
+MAINTENANCE POLICY
+
+Version: 1.0
+Effective Date: ${date}
+Approved By: ${official}
+
+1. PURPOSE
+Establish controlled maintenance procedures.
+
+2. SCHEDULED MAINTENANCE
+- Approved maintenance windows
+- Prior notification to users
+- Change control process followed
+
+3. EMERGENCY MAINTENANCE
+- Approval required
+- Documentation required
+- Security verification after completion
+
+4. REMOTE MAINTENANCE
+- MFA required for access
+- Sessions monitored
+- Activities logged
+
+5. MAINTENANCE PERSONNEL
+- Authorized personnel only
+- Background checks required
+- Escorted access for non-employees
+
+6. TOOLS
+- Approved tools only
+- Scanned for malware
+- Removed after maintenance
+
+Approved: _________________ Date: _________________
+${official}`;
+        }
+
+        function generateGenericPolicy(orgName, official, date) {
+            return `${orgName.toUpperCase()}
+SECURITY POLICY
+
+Version: 1.0
+Effective Date: ${date}
+Approved By: ${official}
+
+1. PURPOSE
+This policy establishes security requirements for ${orgName}.
+
+2. SCOPE
+Applies to all personnel and systems.
+
+3. POLICY STATEMENTS
+- Security is everyone's responsibility
+- Compliance with all applicable regulations required
+- Violations subject to disciplinary action
+
+4. ROLES AND RESPONSIBILITIES
+- Management: Provide resources and oversight
+- Security Team: Implement and monitor
+- Users: Comply with policies
+
+5. REVIEW
+This policy reviewed annually.
+
+Approved: _________________ Date: _________________
+${official}`;
         }
 
         // Initialize
