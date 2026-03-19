@@ -1005,38 +1005,171 @@
             event.target.classList.add('active');
         }
 
-        // Assessment questions
+        // Assessment questions - All 110 CMMC Level 2 Controls
         const questions = [
-            {
-                id: 1,
-                text: "Does your organization have documented access control policies and procedures?",
-                controls: ["AC-1"],
-                options: ["Yes, fully documented and approved", "Partially documented", "In development", "No"]
-            },
-            {
-                id: 2,
-                text: "Are user accounts individually identified and authenticated before system access?",
-                controls: ["IA-2", "IA-3"],
-                options: ["Yes, all users", "Yes, but some shared accounts exist", "Only for privileged users", "No"]
-            },
-            {
-                id: 3,
-                text: "Is multi-factor authentication (MFA) required for privileged accounts?",
-                controls: ["IA-2(1)"],
-                options: ["Yes, enforced for all privileged accounts", "Yes, but not enforced", "Planned implementation", "No"]
-            },
-            {
-                id: 4,
-                text: "Does your organization conduct regular security awareness training?",
-                controls: ["AT-1", "AT-2"],
-                options: ["Yes, annually with phishing tests", "Yes, but no testing", "Irregular training", "No"]
-            },
-            {
-                id: 5,
-                text: "Are audit logs maintained for all systems processing CUI?",
-                controls: ["AU-1", "AU-2", "AU-3"],
-                options: ["Yes, centralized and reviewed", "Yes, but not reviewed", "Partial coverage", "No"]
-            }
+            // ACCESS CONTROL (AC) - 22 controls
+            { id: 1, text: "Does your organization have documented access control policies and procedures?", controls: ["AC-1"], options: ["Yes, fully documented and approved", "Partially documented", "In development", "No"] },
+            { id: 2, text: "Are accounts managed through formal processes for creation, modification, and removal?", controls: ["AC-2"], options: ["Yes, fully implemented", "Partially implemented", "Informal process", "No process"] },
+            { id: 3, text: "Is access to systems and data enforced based on authorization policies?", controls: ["AC-3"], options: ["Yes, consistently enforced", "Mostly enforced", "Partially enforced", "Not enforced"] },
+            { id: 4, text: "Is information flow controlled between security domains?", controls: ["AC-4"], options: ["Yes, all flows controlled", "Most flows controlled", "Some controls", "No controls"] },
+            { id: 5, text: "Is separation of duties enforced to prevent conflict of interest?", controls: ["AC-5"], options: ["Yes, fully separated", "Mostly separated", "Partially separated", "Not separated"] },
+            { id: 6, text: "Is least privilege enforced for all user accounts?", controls: ["AC-6"], options: ["Yes, strictly enforced", "Mostly enforced", "Partially enforced", "Not enforced"] },
+            { id: 7, text: "Are users prevented from installing software without authorization?", controls: ["AC-6(1)"], options: ["Yes, blocked for all users", "Blocked for most", "Partially blocked", "Not blocked"] },
+            { id: 8, text: "Are role-based access controls implemented?", controls: ["AC-6(5)"], options: ["Yes, fully implemented", "Partially implemented", "Planned", "Not implemented"] },
+            { id: 9, text: "Are default accounts disabled or removed?", controls: ["AC-6(7)"], options: ["Yes, all defaults removed", "Most removed", "Some removed", "Not addressed"] },
+            { id: 10, text: "Are privileged accounts limited and controlled?", controls: ["AC-6(9)"], options: ["Yes, strictly limited", "Mostly limited", "Partially limited", "Not limited"] },
+            { id: 11, text: "Are unsuccessful login attempts limited and locked out?", controls: ["AC-7"], options: ["Yes, all systems", "Most systems", "Some systems", "No lockout"] },
+            { id: 12, text: "Is concurrent session control implemented?", controls: ["AC-10"], options: ["Yes, all sessions", "Most sessions", "Some sessions", "No control"] },
+            { id: 13, text: "Are session locks enforced after inactivity?", controls: ["AC-11"], options: ["Yes, 15 minutes or less", "Yes, 30 minutes", "Longer timeout", "No lock"] },
+            { id: 14, text: "Is session termination automatic after inactivity?", controls: ["AC-12"], options: ["Yes, automatic", "Manual only", "Partial", "No termination"] },
+            { id: 15, text: "Are remote access connections monitored and controlled?", controls: ["AC-17"], options: ["Yes, fully monitored", "Mostly monitored", "Partially monitored", "Not monitored"] },
+            { id: 16, text: "Are remote access methods managed and authorized?", controls: ["AC-17(1)"], options: ["Yes, all methods", "Most methods", "Some methods", "Not managed"] },
+            { id: 17, text: "Is wireless access controlled and encrypted?", controls: ["AC-18"], options: ["Yes, WPA3/Enterprise", "WPA2/Enterprise", "Basic WPA2", "No encryption"] },
+            { id: 18, text: "Is wireless access authenticated?", controls: ["AC-18(1)"], options: ["Yes, certificate-based", "Username/password", "Pre-shared key", "No authentication"] },
+            { id: 19, text: "Is portable and mobile device access controlled?", controls: ["AC-19"], options: ["Yes, fully controlled", "Mostly controlled", "Partially controlled", "Not controlled"] },
+            { id: 20, text: "Are external information systems restricted?", controls: ["AC-20"], options: ["Yes, fully restricted", "Mostly restricted", "Partially restricted", "Not restricted"] },
+            { id: 21, text: "Is information sharing restricted and authorized?", controls: ["AC-21"], options: ["Yes, fully controlled", "Mostly controlled", "Partially controlled", "Not controlled"] },
+            { id: 22, text: "Are publicly accessible content reviewed and approved?", controls: ["AC-22"], options: ["Yes, all content", "Most content", "Some content", "Not reviewed"] },
+
+            // AUDIT & ACCOUNTABILITY (AU) - 14 controls
+            { id: 23, text: "Are audit policies and procedures documented?", controls: ["AU-1"], options: ["Yes, fully documented", "Partially documented", "In development", "No"] },
+            { id: 24, text: "Are auditable events defined and tracked?", controls: ["AU-2"], options: ["Yes, all events", "Most events", "Some events", "Not defined"] },
+            { id: 25, text: "Are audit records generated for all defined events?", controls: ["AU-3"], options: ["Yes, all events", "Most events", "Some events", "Not generated"] },
+            { id: 26, text: "Do audit records include required content (user, event, time, outcome)?", controls: ["AU-3(1)"], options: ["Yes, all fields", "Most fields", "Some fields", "Incomplete"] },
+            { id: 27, text: "Are audit logs reviewed regularly?", controls: ["AU-6"], options: ["Yes, weekly or more", "Monthly", "Quarterly", "Not reviewed"] },
+            { id: 28, text: "Are audit log reviews automated with alerts?", controls: ["AU-6(1)"], options: ["Yes, fully automated", "Partially automated", "Manual only", "Not reviewed"] },
+            { id: 29, text: "Are audit reduction and report generation tools used?", controls: ["AU-7"], options: ["Yes, fully implemented", "Partially implemented", "Basic tools", "No tools"] },
+            { id: 30, text: "Are audit logs protected from modification?", controls: ["AU-9"], options: ["Yes, tamper-proof", "Access controlled", "Basic protection", "No protection"] },
+            { id: 31, text: "Are audit logs backed up to protected storage?", controls: ["AU-9(2)"], options: ["Yes, real-time backup", "Daily backup", "Weekly backup", "No backup"] },
+            { id: 32, text: "Is audit log access restricted to authorized personnel?", controls: ["AU-9(4)"], options: ["Yes, strictly restricted", "Mostly restricted", "Partially restricted", "Not restricted"] },
+            { id: 33, text: "Are non-local audits supported for distributed systems?", controls: ["AU-10"], options: ["Yes, all systems", "Most systems", "Some systems", "Not supported"] },
+            { id: 34, text: "Are audit records retained for at least one year?", controls: ["AU-11"], options: ["Yes, 1+ years", "6-12 months", "3-6 months", "Less than 3 months"] },
+            { id: 35, text: "Are audit generation failures alerted and handled?", controls: ["AU-12"], options: ["Yes, automated alerts", "Manual monitoring", "Partial monitoring", "No monitoring"] },
+            { id: 36, text: "Are time synchronization mechanisms implemented?", controls: ["AU-13"], options: ["Yes, all systems synced", "Most systems", "Some systems", "Not synced"] },
+
+            // AWARENESS & TRAINING (AT) - 4 controls
+            { id: 37, text: "Are security awareness training policies documented?", controls: ["AT-1"], options: ["Yes, fully documented", "Partially documented", "In development", "No"] },
+            { id: 38, text: "Do all users receive security awareness training?", controls: ["AT-2"], options: ["Yes, all users annually", "Most users", "Some users", "No training"] },
+            { id: 39, text: "Is role-based security training provided?", controls: ["AT-3"], options: ["Yes, all roles", "Most roles", "Some roles", "No role-based training"] },
+            { id: 40, text: "Is security training updated with emerging threats?", controls: ["AT-4"], options: ["Yes, quarterly updates", "Semi-annual", "Annual", "Not updated"] },
+
+            // CONFIGURATION MANAGEMENT (CM) - 10 controls
+            { id: 41, text: "Are configuration management policies documented?", controls: ["CM-1"], options: ["Yes, fully documented", "Partially documented", "In development", "No"] },
+            { id: 42, text: "Are baseline configurations established?", controls: ["CM-2"], options: ["Yes, all systems", "Most systems", "Some systems", "No baselines"] },
+            { id: 43, text: "Are configuration change controls implemented?", controls: ["CM-3"], options: ["Yes, all changes", "Most changes", "Some changes", "No controls"] },
+            { id: 44, text: "Are security impact analyses performed for changes?", controls: ["CM-4"], options: ["Yes, all changes", "Major changes only", "Some changes", "Not performed"] },
+            { id: 45, text: "Are access restrictions for changes enforced?", controls: ["CM-5"], options: ["Yes, strictly enforced", "Mostly enforced", "Partially enforced", "Not enforced"] },
+            { id: 46, text: "Is configuration settings enforced and monitored?", controls: ["CM-6"], options: ["Yes, automated enforcement", "Manual enforcement", "Partial enforcement", "Not enforced"] },
+            { id: 47, text: "Are least functionality principles applied?", controls: ["CM-7"], options: ["Yes, all systems", "Most systems", "Some systems", "Not applied"] },
+            { id: 48, text: "Are unnecessary ports, protocols, and services disabled?", controls: ["CM-7(1)"], options: ["Yes, all disabled", "Most disabled", "Some disabled", "Not reviewed"] },
+            { id: 49, text: "Is software installation restricted to authorized users?", controls: ["CM-7(2)"], options: ["Yes, all users restricted", "Most users", "Some users", "No restrictions"] },
+            { id: 50, text: "Are information system component inventories maintained?", controls: ["CM-8"], options: ["Yes, complete inventory", "Most components", "Some components", "No inventory"] },
+
+            // CONTINGENCY PLANNING (CP) - 8 controls
+            { id: 51, text: "Are contingency planning policies documented?", controls: ["CP-1"], options: ["Yes, fully documented", "Partially documented", "In development", "No"] },
+            { id: 52, text: "Is a contingency plan developed and maintained?", controls: ["CP-2"], options: ["Yes, comprehensive plan", "Basic plan", "Outdated plan", "No plan"] },
+            { id: 53, text: "Are contingency plan tests conducted regularly?", controls: ["CP-4"], options: ["Yes, annually or more", "Every 2 years", "Irregular", "Not tested"] },
+            { id: 54, text: "Are backup policies and procedures implemented?", controls: ["CP-9"], options: ["Yes, fully implemented", "Partially implemented", "Basic backups", "No backups"] },
+            { id: 55, text: "Are backups tested regularly?", controls: ["CP-9(1)"], options: ["Yes, tested quarterly", "Twice yearly", "Annually", "Not tested"] },
+            { id: 56, text: "Are information system recovery and reconstitution plans in place?", controls: ["CP-10"], options: ["Yes, fully documented", "Partially documented", "Basic plans", "No plans"] },
+            { id: 57, text: "Are alternate processing sites identified?", controls: ["CP-11"], options: ["Yes, contracted and ready", "Identified only", "Being evaluated", "Not identified"] },
+            { id: 58, text: "Is safe mode of operation defined for emergencies?", controls: ["CP-12"], options: ["Yes, fully defined", "Partially defined", "Basic definition", "Not defined"] },
+
+            // IDENTIFICATION & AUTHENTICATION (IA) - 11 controls
+            { id: 59, text: "Are identification and authentication policies documented?", controls: ["IA-1"], options: ["Yes, fully documented", "Partially documented", "In development", "No"] },
+            { id: 60, text: "Are users uniquely identified and authenticated?", controls: ["IA-2"], options: ["Yes, all users", "Most users", "Some users", "Not required"] },
+            { id: 61, text: "Is multi-factor authentication required for network access?", controls: ["IA-2(1)"], options: ["Yes, all access", "Privileged only", "Some access", "Not required"] },
+            { id: 62, text: "Is multi-factor authentication required for local access?", controls: ["IA-2(2)"], options: ["Yes, all local", "Privileged only", "Some systems", "Not required"] },
+            { id: 63, text: "Are devices uniquely identified and authenticated?", controls: ["IA-3"], options: ["Yes, all devices", "Most devices", "Some devices", "Not required"] },
+            { id: 64, text: "Are identifier management processes implemented?", controls: ["IA-4"], options: ["Yes, fully implemented", "Partially implemented", "Basic process", "No process"] },
+            { id: 65, text: "Are authenticator management processes implemented?", controls: ["IA-5"], options: ["Yes, fully implemented", "Partially implemented", "Basic process", "No process"] },
+            { id: 66, text: "Are password-based authenticators protected?", controls: ["IA-5(1)"], options: ["Yes, strong requirements", "Basic requirements", "Weak requirements", "No requirements"] },
+            { id: 67, text: "Are PKI-based authenticators implemented?", controls: ["IA-5(2)"], options: ["Yes, fully implemented", "Partially implemented", "Planned", "Not implemented"] },
+            { id: 68, text: "Are inactivity timeouts enforced?", controls: ["IA-11"], options: ["Yes, 15 min or less", "30 minutes", "1 hour", "No timeout"] },
+            { id: 69, text: "Are device identification and authentication required?", controls: ["IA-12"], options: ["Yes, all devices", "Most devices", "Some devices", "Not required"] },
+
+            // INCIDENT RESPONSE (IR) - 8 controls
+            { id: 70, text: "Are incident response policies and procedures documented?", controls: ["IR-1"], options: ["Yes, fully documented", "Partially documented", "In development", "No"] },
+            { id: 71, text: "Is an incident response capability established?", controls: ["IR-2"], options: ["Yes, full team", "Partial team", "Individual assigned", "No capability"] },
+            { id: 72, text: "Are incident response procedures tested?", controls: ["IR-3"], options: ["Yes, annually or more", "Every 2 years", "Irregular", "Not tested"] },
+            { id: 73, text: "Are incident handling capabilities automated?", controls: ["IR-4"], options: ["Yes, fully automated", "Partially automated", "Manual only", "No automation"] },
+            { id: 74, text: "Are incidents tracked and documented?", controls: ["IR-5"], options: ["Yes, all incidents", "Most incidents", "Major incidents only", "Not tracked"] },
+            { id: 75, text: "Are incidents reported to appropriate authorities?", controls: ["IR-6"], options: ["Yes, all required", "Most required", "Some required", "Not reported"] },
+            { id: 76, text: "Is incident response assistance available?", controls: ["IR-7"], options: ["Yes, 24/7 support", "Business hours", "Limited support", "No support"] },
+            { id: 77, text: "Are lessons learned from incidents incorporated?", controls: ["IR-8"], options: ["Yes, always", "Usually", "Sometimes", "Not incorporated"] },
+
+            // MAINTENANCE (MA) - 6 controls
+            { id: 78, text: "Are maintenance policies and procedures documented?", controls: ["MA-1"], options: ["Yes, fully documented", "Partially documented", "In development", "No"] },
+            { id: 79, text: "Is controlled maintenance performed?", controls: ["MA-2"], options: ["Yes, all maintenance", "Most maintenance", "Some maintenance", "Not controlled"] },
+            { id: 80, text: "Are maintenance tools controlled?", controls: ["MA-3"], options: ["Yes, all tools", "Most tools", "Some tools", "Not controlled"] },
+            { id: 81, text: "Is non-local maintenance approved and monitored?", controls: ["MA-4"], options: ["Yes, all non-local", "Most non-local", "Some non-local", "Not monitored"] },
+            { id: 82, text: "Are maintenance personnel authorized?", controls: ["MA-5"], options: ["Yes, all personnel", "Most personnel", "Some personnel", "Not authorized"] },
+            { id: 83, text: "Is timely maintenance performed?", controls: ["MA-6"], options: ["Yes, always timely", "Usually timely", "Sometimes delayed", "Often delayed"] },
+
+            // MEDIA PROTECTION (MP) - 7 controls
+            { id: 84, text: "Are media protection policies documented?", controls: ["MP-1"], options: ["Yes, fully documented", "Partially documented", "In development", "No"] },
+            { id: 85, text: "Is media access restricted?", controls: ["MP-2"], options: ["Yes, strictly restricted", "Mostly restricted", "Partially restricted", "Not restricted"] },
+            { id: 86, text: "Is media marked and labeled?", controls: ["MP-3"], options: ["Yes, all media", "Most media", "Some media", "Not marked"] },
+            { id: 87, text: "Is media storage controlled?", controls: ["MP-4"], options: ["Yes, secure storage", "Basic storage", "Limited controls", "No controls"] },
+            { id: 88, text: "Is media transport protected?", controls: ["MP-5"], options: ["Yes, all transport", "Most transport", "Some transport", "Not protected"] },
+            { id: 89, text: "Is media sanitization performed?", controls: ["MP-6"], options: ["Yes, all media", "Most media", "Some media", "Not sanitized"] },
+            { id: 90, text: "Is media destruction verified?", controls: ["MP-7"], options: ["Yes, all destruction", "Most destruction", "Some destruction", "Not verified"] },
+
+            // PHYSICAL PROTECTION (PE) - 10 controls
+            { id: 91, text: "Are physical protection policies documented?", controls: ["PE-1"], options: ["Yes, fully documented", "Partially documented", "In development", "No"] },
+            { id: 92, text: "Are physical access authorizations enforced?", controls: ["PE-2"], options: ["Yes, all access", "Most access", "Some access", "Not enforced"] },
+            { id: 93, text: "Are physical access controls implemented?", controls: ["PE-3"], options: ["Yes, comprehensive", "Most areas", "Some areas", "Minimal controls"] },
+            { id: 94, text: "Are access logs maintained?", controls: ["PE-4"], options: ["Yes, all access", "Most access", "Some access", "Not logged"] },
+            { id: 95, text: "Is access to output devices controlled?", controls: ["PE-5"], options: ["Yes, all devices", "Most devices", "Some devices", "Not controlled"] },
+            { id: 96, text: "Is physical access monitoring implemented?", controls: ["PE-6"], options: ["Yes, 24/7 monitoring", "Business hours", "Limited monitoring", "No monitoring"] },
+            { id: 97, text: "Are visitor access records maintained?", controls: ["PE-8"], options: ["Yes, all visitors", "Most visitors", "Some visitors", "Not recorded"] },
+            { id: 98, text: "Are power equipment and cabling protected?", controls: ["PE-9"], options: ["Yes, fully protected", "Mostly protected", "Partially protected", "Not protected"] },
+            { id: 99, text: "Are emergency shutoff capabilities protected?", controls: ["PE-10"], options: ["Yes, protected", "Mostly protected", "Partially protected", "Not protected"] },
+            { id: 100, text: "Are emergency power capabilities provided?", controls: ["PE-11"], options: ["Yes, UPS/generator", "UPS only", "Limited backup", "No backup"] },
+
+            // PERSONNEL SECURITY (PS) - 5 controls
+            { id: 101, text: "Are personnel security policies documented?", controls: ["PS-1"], options: ["Yes, fully documented", "Partially documented", "In development", "No"] },
+            { id: 102, text: "Are position risk designations assigned?", controls: ["PS-2"], options: ["Yes, all positions", "Most positions", "Some positions", "Not assigned"] },
+            { id: 103, text: "Are personnel screenings performed?", controls: ["PS-3"], options: ["Yes, all personnel", "Most personnel", "Some personnel", "Not screened"] },
+            { id: 104, text: "Are termination procedures implemented?", controls: ["PS-4"], options: ["Yes, comprehensive", "Basic procedures", "Limited procedures", "No procedures"] },
+            { id: 105, text: "Are transfer procedures implemented?", controls: ["PS-5"], options: ["Yes, comprehensive", "Basic procedures", "Limited procedures", "No procedures"] },
+
+            // RISK ASSESSMENT (RA) - 5 controls
+            { id: 106, text: "Are risk assessment policies documented?", controls: ["RA-1"], options: ["Yes, fully documented", "Partially documented", "In development", "No"] },
+            { id: 107, text: "Are security categorizations performed?", controls: ["RA-2"], options: ["Yes, all systems", "Most systems", "Some systems", "Not performed"] },
+            { id: 108, text: "Are risk assessments conducted?", controls: ["RA-3"], options: ["Yes, annually or more", "Every 2 years", "Irregular", "Not conducted"] },
+            { id: 109, text: "Are vulnerability scans performed?", controls: ["RA-5"], options: ["Yes, monthly or more", "Quarterly", "Annually", "Not scanned"] },
+            { id: 110, text: "Are technical surveillance countermeasures reviewed?", controls: ["RA-6"], options: ["Yes, regularly", "Occasionally", "Rarely", "Not reviewed"] },
+
+            // SYSTEM & COMMUNICATIONS PROTECTION (SC) - 16 controls
+            { id: 111, text: "Are system and communications protection policies documented?", controls: ["SC-1"], options: ["Yes, fully documented", "Partially documented", "In development", "No"] },
+            { id: 112, text: "Are application partitioning boundaries enforced?", controls: ["SC-2"], options: ["Yes, all boundaries", "Most boundaries", "Some boundaries", "Not enforced"] },
+            { id: 113, text: "Are security functions isolated?", controls: ["SC-3"], options: ["Yes, fully isolated", "Mostly isolated", "Partially isolated", "Not isolated"] },
+            { id: 114, text: "Is information in shared resources protected?", controls: ["SC-4"], options: ["Yes, all resources", "Most resources", "Some resources", "Not protected"] },
+            { id: 115, text: "Is denial of service protection implemented?", controls: ["SC-5"], options: ["Yes, comprehensive", "Basic protection", "Limited protection", "No protection"] },
+            { id: 116, text: "Are resource availability issues addressed?", controls: ["SC-6"], options: ["Yes, all issues", "Most issues", "Some issues", "Not addressed"] },
+            { id: 117, text: "Are boundary protections implemented?", controls: ["SC-7"], options: ["Yes, comprehensive", "Most boundaries", "Some boundaries", "No protection"] },
+            { id: 118, text: "Are ports, protocols, and services controlled?", controls: ["SC-7(4)"], options: ["Yes, all controlled", "Most controlled", "Some controlled", "Not controlled"] },
+            { id: 119, text: "Is encryption used for CUI transmission?", controls: ["SC-8"], options: ["Yes, all transmission", "Most transmission", "Some transmission", "Not encrypted"] },
+            { id: 120, text: "Is encryption used for CUI storage?", controls: ["SC-28"], options: ["Yes, all storage", "Most storage", "Some storage", "Not encrypted"] },
+            { id: 121, text: "Are cryptographic key management processes implemented?", controls: ["SC-12"], options: ["Yes, fully implemented", "Partially implemented", "Basic process", "No process"] },
+            { id: 122, text: "Are cryptographic modules FIPS 140-2 validated?", controls: ["SC-13"], options: ["Yes, all modules", "Most modules", "Some modules", "Not validated"] },
+            { id: 123, text: "Are public key infrastructures implemented?", controls: ["SC-17"], options: ["Yes, full PKI", "Basic PKI", "Limited PKI", "No PKI"] },
+            { id: 124, text: "Are mobile code controls implemented?", controls: ["SC-18"], options: ["Yes, all code", "Most code", "Some code", "No controls"] },
+            { id: 125, text: "Are voice over IP controls implemented?", controls: ["SC-19"], options: ["Yes, all VoIP", "Most VoIP", "Some VoIP", "No controls"] },
+            { id: 126, text: "Are secure name/address resolution services implemented?", controls: ["SC-20"], options: ["Yes, all services", "Most services", "Some services", "Not implemented"] },
+
+            // SYSTEM & INFORMATION INTEGRITY (SI) - 10 controls
+            { id: 127, text: "Are system and information integrity policies documented?", controls: ["SI-1"], options: ["Yes, fully documented", "Partially documented", "In development", "No"] },
+            { id: 128, text: "Are flaws identified and remediated?", controls: ["SI-2"], options: ["Yes, promptly", "Usually timely", "Sometimes delayed", "Often delayed"] },
+            { id: 129, text: "Are malicious code protections implemented?", controls: ["SI-3"], options: ["Yes, comprehensive", "Mostly implemented", "Basic protection", "No protection"] },
+            { id: 130, text: "Are information system monitoring tools implemented?", controls: ["SI-4"], options: ["Yes, comprehensive", "Mostly implemented", "Basic monitoring", "No monitoring"] },
+            { id: 131, text: "Are security alerts and advisories received?", controls: ["SI-5"], options: ["Yes, all sources", "Most sources", "Some sources", "Not received"] },
+            { id: 132, text: "Are security function verification checks performed?", controls: ["SI-6"], options: ["Yes, regularly", "Occasionally", "Rarely", "Not performed"] },
+            { id: 133, text: "Are software, firmware, and information integrity checks performed?", controls: ["SI-7"], options: ["Yes, all checks", "Most checks", "Some checks", "Not performed"] },
+            { id: 134, text: "Is spam protection implemented?", controls: ["SI-8"], options: ["Yes, comprehensive", "Mostly implemented", "Basic protection", "No protection"] },
+            { id: 135, text: "Are information inputs restricted?", controls: ["SI-10"], options: ["Yes, all inputs", "Most inputs", "Some inputs", "Not restricted"] },
+            { id: 136, text: "Is error handling implemented?", controls: ["SI-11"], options: ["Yes, comprehensive", "Mostly implemented", "Basic handling", "No handling"] }
         ];
 
         let currentQuestion = 0;
@@ -1045,6 +1178,12 @@
         function renderQuestion() {
             const q = questions[currentQuestion];
             const container = document.getElementById('assessment-questions');
+            
+            // Update counter
+            const counter = document.getElementById('questionCounter');
+            if (counter) {
+                counter.textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+            }
             
             container.innerHTML = `
                 <div class="question-card">
