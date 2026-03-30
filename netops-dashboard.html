@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetOps Dashboard | Unified Network Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --border: #334155;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --meraki: #78be20;
+            --ubiquiti: #0559c9;
+            --sonicwall: #e31837;
+            --prtg: #f9b759;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--info), var(--success));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--info);
+            color: white;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.online { background: var(--success); }
+        .status-dot.warning { background: var(--warning); }
+        .status-dot.offline { background: var(--danger); }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .container {
+            padding: 1.5rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* Platform Cards */
+        .platforms-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .platform-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .platform-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+
+        .platform-card.prtg::before { background: var(--prtg); }
+        .platform-card.meraki::before { background: var(--meraki); }
+        .platform-card.ubiquiti::before { background: var(--ubiquiti); }
+        .platform-card.sonicwall::before { background: var(--sonicwall); }
+
+        .platform-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .platform-name {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .platform-status {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--success);
+        }
+
+        .platform-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+        }
+
+        .platform-stat {
+            text-align: center;
+            padding: 0.5rem;
+            background: rgba(255,255,255,0.03);
+            border-radius: 6px;
+        }
+
+        .platform-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .platform-stat-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        /* Main Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Device Table */
+        .device-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .device-table th,
+        .device-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.875rem;
+        }
+
+        .device-table th {
+            color: var(--text-muted);
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+        }
+
+        .device-table tr:hover {
+            background: rgba(255,255,255,0.02);
+        }
+
+        .device-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .device-status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+
+        .device-platform {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.125rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .device-platform.prtg { background: rgba(249, 183, 89, 0.1); color: var(--prtg); }
+        .device-platform.meraki { background: rgba(120, 190, 32, 0.1); color: var(--meraki); }
+        .device-platform.ubiquiti { background: rgba(5, 89, 201, 0.1); color: var(--ubiquiti); }
+        .device-platform.sonicwall { background: rgba(227, 24, 55, 0.1); color: var(--sonicwall); }
+
+        .metric-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .metric-value {
+            font-weight: 600;
+            min-width: 40px;
+        }
+
+        .mini-bar {
+            width: 60px;
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .mini-bar-fill {
+            height: 100%;
+            border-radius: 2px;
+        }
+
+        .mini-bar-fill.success { background: var(--success); }
+        .mini-bar-fill.warning { background: var(--warning); }
+        .mini-bar-fill.danger { background: var(--danger); }
+
+        /* Alerts Panel */
+        .alert-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .alert-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+            border-left: 3px solid var(--warning);
+        }
+
+        .alert-item.critical {
+            border-left-color: var(--danger);
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        .alert-item.info {
+            border-left-color: var(--info);
+        }
+
+        .alert-icon {
+            font-size: 1.25rem;
+        }
+
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-title {
+            font-weight: 500;
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .alert-meta {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Stats Row */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .stat-icon.success { background: rgba(34, 197, 94, 0.1); }
+        .stat-icon.warning { background: rgba(245, 158, 11, 0.1); }
+        .stat-icon.danger { background: rgba(239, 68, 68, 0.1); }
+        .stat-icon.info { background: rgba(59, 130, 246, 0.1); }
+
+        .stat-info h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .stat-info p {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .action-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            border-color: var(--info);
+            transform: translateY(-2px);
+        }
+
+        .action-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .action-label {
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .platforms-grid { grid-template-columns: repeat(2, 1fr); }
+            .dashboard-grid { grid-template-columns: 1fr; }
+            .stats-row { grid-template-columns: repeat(2, 1fr); }
+            .quick-actions { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .platforms-grid { grid-template-columns: 1fr; }
+            .stats-row { grid-template-columns: 1fr; }
+            .quick-actions { grid-template-columns: 1fr; }
+            .header-actions { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">🌐</div>
+            NetOps Dashboard
+        </div>
+        <div class="header-actions">
+            <div class="status-indicator">
+                <span class="status-dot online"></span>
+                <span>All Systems Online</span>
+            </div>
+            <button class="btn btn-outline">⚙️ Settings</button>
+            <button class="btn btn-primary">📊 Export Report</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Platform Overview Cards -->
+        <div class="platforms-grid">
+            <div class="platform-card prtg">
+                <div class="platform-header">
+                    <div class="platform-name">
+                        <span>📊</span> PRTG
+                    </div>
+                    <span class="platform-status">Connected</span>
+                </div>
+                <div class="platform-stats">
+                    <div class="platform-stat">
+                        <div class="platform-stat-value" style="color: var(--prtg)">247</div>
+                        <div class="platform-stat-label">Sensors</div>
+                    </div>
+                    <div class="platform-stat">
+                        <div class="platform-stat-value" style="color: var(--success)">98.2%</div>
+                        <div class="platform-stat-label">Uptime</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="platform-card meraki">
+                <div class="platform-header">
+                    <div class="platform-name">
+                        <span>☁️</span> Cisco Meraki
+                    </div>
+                    <span class="platform-status">Connected</span>
+                </div>
+                <div class="platform-stats">
+                    <div class="platform-stat">
+                        <div class="platform-stat-value" style="color: var(--meraki)">12</div>
+                        <div class="platform-stat-label">Networks</div>
+                    </div>
+                    <div class="platform-stat">
+                        <div class="platform-stat-value" style="color: var(--success)">89</div>
+                        <div class="platform-stat-label">Devices</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="platform-card ubiquiti">
+                <div class="platform-header">
+                    <div class="platform-name">
+                        <span>🎯</span> Ubiquiti UDM Pro
+                    </div>
+                    <span class="platform-status">Connected</span>
+                </div>
+                <div class="platform-stats">
+                    <div class="platform-stat">
+                        <div class="platform-stat-value" style="color: var(--ubiquiti)">34</div>
+                        <div class="platform-stat-label">Clients</div>
+                    </div>
+                    <div class="platform-stat">
+                        <div class="platform-stat-value" style="color: var(--warning)">856</div>
+                        <div class="platform-stat-label">Mbps</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="platform-card sonicwall">
+                <div class="platform-header">
+                    <div class="platform-name">
+                        <span>🔥</span> SonicWall 2700
+                    </div>
+                    <span class="platform-status">Connected</span>
+                </div>
+                <div class="platform-stats">
+                    <div class="platform-stat">
+                        <div class="platform-stat-value" style="color: var(--sonicwall)">2.4K</div>
+                        <div class="platform-stat-label">Threats Blocked</div>
+                    </div>
+                    <div class="platform-stat">
+                        <div class="platform-stat-value" style="color: var(--success)">Active</division>
+                        <div class="platform-stat-label">VPN Tunnels</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Overview -->
+        <div class="stats-row">
+            <div class="stat-box">
+                <div class="stat-icon success">🟢</div>
+                <div class="stat-info">
+                    <h3>372</h3>
+                    <p>Devices Online</p>
+                </div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-icon warning">🟡</div>
+                <div class="stat-info">
+                    <h3>3</h3>
+                    <p>Warnings</p>
+                </div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-icon danger">🔴</div>
+                <div class="stat-info">
+                    <h3>0</h3>
+                    <p>Critical Alerts</p>
+                </div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-icon info">📈</div>
+                <div class="stat-info">
+                    <h3>2.1 TB</h3>
+                    <p>Today's Traffic</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Dashboard -->
+        <div class="dashboard-grid">
+            <!-- Device Status Table -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Device Status Overview</div>
+                    <div class="card-actions">
+                        <button class="btn btn-outline">Filter</button>
+                        <button class="btn btn-outline">Refresh</button>
+                    </div>
+                </div>
+
+                <div style="overflow-x: auto;">
+                    <table class="device-table">
+                        <thead>
+                            <tr>
+                                <th>Device</th>
+                                <th>Platform</th>
+                                <th>Status</th>
+                                <th>CPU</th>
+                                <th>Memory</th>
+                                <th>Uptime</th>
+                                <th>Last Seen</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>MX-100-HQ</strong><br><span style="font-size: 0.75rem; color: var(--text-muted)">Main Firewall</span></td>
+                                <td><span class="device-platform meraki">☁️ Meraki</span></td>
+                                <td><span class="device-status"><span class="device-status-dot" style="background: var(--success)"></span> Online</span></td>
+                                <td>
+                                    <div class="metric-bar">
+                                        <span class="metric-value">23%</span>
+                                        <div class="mini-bar"><div class="mini-bar-fill success" style="width: 23%"></div></div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="metric-bar">
+                                        <span class="metric-value">45%</span>
+                                        <div class="mini-bar"><div class="mini-bar-fill success" style="width: 45%"></div></div>
+                                    </div>
+                                </td>
+                                <td>45d 12h</td>
+                                <td>2 min ago</td>
+                            </tr>
+                            <tr>
+                                <td><strong>UDM-Pro-Main</strong><br><span style="font-size: 0.75rem; color: var(--text-muted)">Gateway</span></td>
+                                <td><span class="device-platform ubiquiti">🎯 Ubiquiti</span></td>
+                                <td><span class="device-status"><span class="device-status-dot" style="background: var(--success)"></span> Online</span></td>
+                                <td>
+                                    <div class="metric-bar">
+                                        <span class="metric-value">34%</span>
+                                        <div class="mini-bar"><div class="mini-bar-fill success" style="width: 34%"></div></div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="metric-bar">
+                                        <span class="metric-value">62%</span>
+                                        <div class="mini-bar"><div class="mini-bar-fill warning" style="width: 62%"></div></div>
+                                    </div>
+                                </td>
+                                <td>89d 4h</td>
+                                <td>1 min ago</td>
+                            </tr>
+                            <tr>
+                                <td><strong>NSA-2700-Edge</strong><br><span style="font-size: 0.75rem; color: var(--text-muted)">Security Appliance</span></td>
+                                <td><span class="device-platform sonicwall">🔥 SonicWall</span></td>
+                                <td><span class="device-status"><span class="device-status-dot" style="background: var(--success)"></span> Online</span></td>
+                                <td>
+                                    <div class="metric-bar">
+                                        <span class="metric-value">18%</span>
+                                        <div class="mini-bar"><div class="mini-bar-fill success" style="width: 18%"></div></div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="metric-bar">
+                                        <span class="metric-value">38%</span>
+                                        <div class="mini-bar"><div class="mini-bar-fill success" style="width: 38%"></div></div>
+                                    </div>
+                                </td>
+                                <td>156d 8h</td>
+                                <td>5 min ago</td>
+                            </tr>
+                            <tr>
+                                <td><strong>MS120-8P-Office1</strong><br><span style="font-size: 0.75rem; color: var(--text-muted)">Access Switch</span></td>
+                                <td><span class="device-platform meraki">☁️ Meraki</span></td>
+                                <td><span class="device-status"><span class="device-status-dot" style="background: var(--warning)"></span> Warning</span></td>
+                                <td>
+                                    <div class="metric-bar">
+                                        <span class="metric-value">67%</span>
+                                        <div class="mini-bar"><div class="mini-bar-fill warning" style="width: 67%"></div></div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="metric-bar">
+                                        <span class="metric-value">78%</span>
+                                        <div class="mini-bar"><div class="mini-bar-fill warning" style="width: 78%"></div></div>
+                                    </div>
+                                </td>
+                                <td>234d 15h</td>
+                                <td>12 min ago</td>
+                            </tr>
+                            <tr>
+                                <td><strong>UAP-AC-Pro-Ware</strong><br><span style="font-size: 0.75rem; color: var(--text-muted)">Warehouse AP</span></td>
+                                <td><span class="device-platform ubiquiti">🎯 Ubiquiti</span></td>
+                                <td><span class="device-status"><span class="device-status-dot" style="background: var(--success)"></span> Online</span></td>
+                                <td>—</td>
+                                <td>—</td>
+                                <td>45d 3h</td>
+                                <td>Just now</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Alerts Panel -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Active Alerts</div>
+                    <button class="btn btn-outline">View All</button>
+                </div>
+
+                <div class="alert-list">
+                    <div class="alert-item warning">
+                        <span class="alert-icon">⚠️</span>
+                        <div class="alert-content">
+                            <div class="alert-title">High CPU Usage - MS120-8P-Office1</div>
+                            <div class="alert-meta">Meraki • 12 minutes ago • CPU at 67%</div>
+                        </div>
+                    </div>
+
+                    <div class="alert-item warning">
+                        <span class="alert-icon">📡</span>
+                        <div class="alert-content">
+                            <div class="alert-title">Signal Strength Degraded</div>
+                            <div class="alert-meta">UAP-AC-Pro-Ware • 45 minutes ago • -72 dBm</div>
+                        </div>
+                    </div>
+
+                    <div class="alert-item info">
+                        <span class="alert-icon">🔄</span>
+                        <div class="alert-content">
+                            <div class="alert-title">Firmware Update Available</div>
+                            <div class="alert-meta">SonicWall NSA-2700 • 2 hours ago • v7.0.1-5030</div>
+                        </div>
+                    </div>
+
+                    <div class="alert-item info">
+                        <span class="alert-icon">👤</span>
+                        <div class="alert-content">
+                            <div class="alert-title">New Client Connected</div>
+                            <div class="alert-meta">UDM-Pro-Main • 3 hours ago • iPhone-12-Pro</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <div class="action-btn" onclick="alert('Opening PRTG Console...')">
+                <div class="action-icon">📊</div>
+                <div class="action-label">PRTG Console</div>
+            </div>
+            <div class="action-btn" onclick="alert('Opening Meraki Dashboard...')">
+                <div class="action-icon">☁️</div>
+                <div class="action-label">Meraki Dashboard</div>
+            </div>
+            <div class="action-btn" onclick="alert('Opening UniFi Controller...')">
+                <div class="action-icon">🎯</div>
+                <div class="action-label">UniFi Controller</div>
+            </div>
+            <div class="action-btn" onclick="alert('Opening SonicWall...')">
+                <div class="action-icon">🔥</div>
+                <div class="action-label">SonicWall NSM</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Auto-refresh every 30 seconds
+        setInterval(() => {
+            console.log('Refreshing device data...');
+            // In production, this would fetch from APIs
+        }, 30000);
+
+        // Simulate real-time updates
+        function updateMetrics() {
+            // Update random metrics for demo
+            const metrics = document.querySelectorAll('.metric-value');
+            metrics.forEach(metric => {
+                if (Math.random() > 0.7) {
+                    const current = parseInt(metric.textContent);
+                    const change = Math.floor(Math.random() * 5) - 2;
+                    const newValue = Math.max(0, Math.min(100, current + change));
+                    metric.textContent = newValue + '%';
+                    
+                    // Update bar color
+                    const bar = metric.nextElementSibling.querySelector('.mini-bar-fill');
+                    bar.style.width = newValue + '%';
+                    bar.className = 'mini-bar-fill ' + (newValue > 80 ? 'danger' : newValue > 60 ? 'warning' : 'success');
+                }
+            });
+        }
+
+        setInterval(updateMetrics, 5000);
+    </script>
+</body>
+</html>
