@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMMC Implementation Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --border: #334155;
+            --text: #f8fafc;
+            --muted: #94a3b8;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: var(--muted);
+        }
+
+        .progress-overview {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            padding: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .progress-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.25rem;
+            text-align: center;
+        }
+
+        .progress-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--success);
+        }
+
+        .progress-label {
+            color: var(--muted);
+            font-size: 0.875rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem 2rem;
+        }
+
+        .domain-section {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .domain-header {
+            padding: 1rem 1.25rem;
+            background: rgba(59, 130, 246, 0.1);
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .domain-header:hover {
+            background: rgba(59, 130, 246, 0.15);
+        }
+
+        .domain-title {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .domain-progress {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .progress-bar {
+            width: 150px;
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+
+        .domain-content {
+            display: none;
+            padding: 1rem;
+        }
+
+        .domain-content.active {
+            display: block;
+        }
+
+        .control-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .control-item:last-child {
+            border-bottom: none;
+        }
+
+        .control-check {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .control-info {
+            flex: 1;
+        }
+
+        .control-id {
+            font-weight: 600;
+            color: var(--info);
+            font-size: 0.875rem;
+        }
+
+        .control-name {
+            font-size: 0.9rem;
+        }
+
+        .control-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-not-started { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
+        .status-in-progress { background: rgba(245, 158, 11, 0.1); color: var(--warning); }
+        .status-complete { background: rgba(34, 197, 94, 0.1); color: var(--success); }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            font-size: 0.9rem;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .export-section {
+            text-align: center;
+            padding: 2rem;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .progress-overview { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🔒 CMMC Level 2 Implementation Tracker</h1>
+        <p>Track progress for 110 security controls across 14 domains</p>
+    </div>
+
+    <div class="progress-overview">
+        <div class="progress-card">
+            <div class="progress-value" id="overallProgress">0%</div>
+            <div class="progress-label">Overall Complete</div>
+        </div>
+        <div class="progress-card">
+            <div class="progress-value" id="controlsComplete">0/110</div>
+            <div class="progress-label">Controls Done</div>
+        </div>
+        <div class="progress-card">
+            <div class="progress-value" id="domainsComplete">0/14</div>
+            <div class="progress-label">Domains Complete</div>
+        </div>
+        <div class="progress-card">
+            <div class="progress-value" id="daysRemaining">90</div>
+            <div class="progress-label">Days to Target</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Access Control -->
+        <div class="domain-section">
+            <div class="domain-header" onclick="toggleDomain(this)">
+                <div class="domain-title">
+                    <span>🔐</span>
+                    Access Control (AC) - 22 Controls
+                </div>
+                <div class="domain-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%; background: var(--success)"></div>
+                    </div>
+                    <span class="progress-text">0/22</span>
+                </div>
+            </div>
+            <div class="domain-content">
+                <div class="control-item">
+                    <input type="checkbox" class="control-check" onchange="updateProgress()">
+                    <div class="control-info">
+                        <div class="control-id">AC-1</div>
+                        <div class="control-name">Access Control Policy and Procedures</div>
+                    </div>
+                    <span class="control-status status-not-started">Not Started</span>
+                </div>
+                <div class="control-item">
+                    <input type="checkbox" class="control-check" onchange="updateProgress()">
+                    <div class="control-info">
+                        <div class="control-id">AC-2</div>
+                        <div class="control-name">Account Management</div>
+                    </div>
+                    <span class="control-status status-not-started">Not Started</span>
+                </div>
+                <div class="control-item">
+                    <input type="checkbox" class="control-check" onchange="updateProgress()">
+                    <div class="control-info">
+                        <div class="control-id">AC-3</div>
+                        <div class="control-name">Access Enforcement</div>
+                    </div>
+                    <span class="control-status status-not-started">Not Started</span>
+                </div>
+                <div class="control-item">
+                    <input type="checkbox" class="control-check" onchange="updateProgress()">
+                    <div class="control-info">
+                        <div class="control-id">AC-6</div>
+                        <div class="control-name">Least Privilege</div>
+                    </div>
+                    <span class="control-status status-not-started">Not Started</span>
+                </div>
+                <div class="control-item">
+                    <input type="checkbox" class="control-check" onchange="updateProgress()">
+                    <div class="control-info">
+                        <div class="control-id">AC-7</div>
+                        <div class="control-name">Unsuccessful Logon Attempts</div>
+                    </div>
+                    <span class="control-status status-not-started">Not Started</span>
+                </div>
+                <div class="control-item">
+                    <input type="checkbox" class="control-check" onchange="updateProgress()">
+                    <div class="control-info">
+                        <div class="control-id">AC-11</div>
+                        <div class="control-name">Session Lock</div>
+                    </div>
+                    <span class="control-status status-not-started">Not Started</span>
+                </div>
+                <div class="control-item">
+                    <input type="checkbox" class="control-check" onchange="updateProgress()">
+                    <div class="control-info">
+                        <div class="control-id">AC-17</div>
+                        <div class="control-name">Remote Access</div>
+                    </div>
+                    <span class="control-status status-not-started">Not Started</span>
+                </div>
+                <div class="control-item">
+                    <input type="checkbox" class="control-check" onchange="updateProgress()">
+                    <div class="control-info">
+                        <div class="control-id">AC-18</div>
+                        <div class="control-name">Wireless Access</div>
+                    </div>
+                    <span class="control-status status-not-started">Not Started</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Audit & Accountability -->
+        <div class="domain-section">
+            <div class="domain-header" onclick="toggleDomain(this)">
+                <div class="domain-title">
+                    <span>📊</span>
+                    Audit & Accountability (AU) - 14 Controls
+                </div>
+                <div class="domain-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%; background: var(--success)"></div>
+                    </div>
+                    <span class="progress-text">0/14</span>
+                </div>
+            </div>
+            <div class="domain-content">
+                <div class="control-item">
+                    <input type="checkbox" class="control-check" onchange="updateProgress()">
+                    <div class="control-info">
+                        <div class="control-id">AU-1</div>
+                        <div class="control-name">Audit and Accountability Policy</div>
+                    </div>
+                    <span class="control-status status-not-started">Not Started</span>
+                </div>
+                <div class="control-item">
+                    <input type="checkbox" class="control-check" onchange="updateProgress()">
+                    <div class="control-info">
+                        <div class="control-id">AU-2</div>
+                        <div class="control-name">Audit Events</div>
+                    </div>
+                    <span class="control-status status-not-started">Not Started</span>
+                </div>
+                <div class="control-item">
+                    <input type="checkbox" class="control-check" onchange="updateProgress()">
+                    <div class="control-info">
+                        <div class="control-id">AU-3</div>
+                        <div class="control-name">Audit Record Content</div>
+                    </div>
+                    <span class="control-status status-not-started">Not Started</span>
+                </div>
+                <div class="control-item">
+                    <input type="checkbox" class="control-check" onchange="updateProgress()">
+                    <div class="control-info">
+                        <div class="control-id">AU-6</div>
+                        <div class="control-name">Audit Review</div>
+                    </div>
+                    <span class="control-status status-not-started">Not Started</span>
+                </div>
+                <div class="control-item">
+                    <input type="checkbox" class="control-check" onchange="updateProgress()">
+                    <div class="control-info">
+                        <div class="control-id">AU-9</div>
+                        <div class="control-name">Audit Log Protection</div>
+                    </div>
+                    <span class="control-status status-not-started">Not Started</span>
+                </div>
+                <div class="control-item">
+                    <input type="checkbox" class="control-check" onchange="updateProgress()">
+                    <div class="control-info">
+                        <div class="control-id">AU-11</div>
+                        <div class="control-name">Audit Record Retention</div>
+                    </div>
+                    <span class="control-status status-not-started">Not Started</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Identification & Authentication -->
+        <div class="domain-section">
+            <div class="domain-header" onclick="toggleDomain(this)">
+                <div class="domain-title">
+                    <span>🔑</span>
+                    Identification & Authentication (IA) - 11 Controls
+                </div>
+                <div class="domain-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%; background: var(--success)"></div>
+                    </div>
+                    <span class="progress-text">0/11</span>
+                </div>
+            </div>
+            <div class="domain-content">
+                <div class="control-item">
+                    <input type="checkbox" class="control-check" onchange="updateProgress()">
+                    <div class="control-info">
+                        <div class="control-id">IA-1</div>
+                        <div class="control-name">Identification and Authentication Policy</div>
+                    </div>
+                    <span class="control-status status-not-started">Not Started</span>
+                </div>
+                <div class="control-item">
+                    <input type="checkbox" class="control-check" onchange="updateProgress()">
+                    <div class="control-info">
+                        <div class="control-id">IA-2</div>
+                        <div class="control-name">Identification and Authentication (Organizational Users)</div>
+                    </div>
+                    <span class="control-status status-not-started">Not Started</span>
+                </div>
+                <div class="control-item">
+                    <input type="checkbox" class="control-check" onchange="updateProgress()">
+                    <div class="control-info">
+                        <div class="control-id">IA-2(1)</div>
+                        <div class="control-name">Multi-Factor Authentication for Network Access</div>
+                    </div>
+                    <span class="control-status status-not-started">Not Started</span>
+                </div>
+                <div class="control-item">
+                    <input type="checkbox" class="control-check" onchange="updateProgress()">
+                    <div class="control-info">
+                        <div class="control-id">IA-2(2)</div>
+                        <div class="control-name">Multi-Factor Authentication for Local Access</div>
+                    </div>
+                    <span class="control-status status-not-started">Not Started</span>
+                </div>
+                <div class="control-item">
+                    <input type="checkbox" class="control-check" onchange="updateProgress()">
+                    <div class="control-info">
+                        <div class="control-id">IA-5</div>
+                        <div class="control-name">Authenticator Management</div>
+                    </div>
+                    <span class="control-status status-not-started">Not Started</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- System & Communications Protection -->
+        <div class="domain-section">
+            <div class="domain-header" onclick="toggleDomain(this)">
+                <div class="domain-title">
+                    <span>🛡️</span>
+                    System & Communications Protection (SC) - 16 Controls
+                </div>
+                <div class="domain-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%; background: var(--success)"></div>
+                    </div>
+                    <span class="progress-text">0/16</span>
+                </div>
+            </div>
+            <div class="domain-content">
+                <div class="control-item">
+                    <input type="checkbox" class="control-check" onchange="updateProgress()">
+                    <div class="control-info">
+                        <div class="control-id">SC-1</div>
+                        <div class="control-name">System and Communications Protection Policy</div>
+                    </div>
+                    <span class="control-status status-not-started">Not Started</span>
+                </div>
+                <div class="control-item">
+                    <input type="checkbox" class="control-check" onchange="updateProgress()">
+                    <div class="control-info">
+                        <div class="control-id">SC-7</div>
+                        <div class="control-name">Boundary Protection</div>
+                    </div>
+                    <span class="control-status status-not-started">Not Started</span>
+                </div>
+                <div class="control-item">
+                    <input type="checkbox" class="control-check" onchange="updateProgress()">
+                    <div class="control-info">
+                        <div class="control-id">SC-8</div>
+                        <div class="control-name">Transmission Confidentiality and Integrity</div>
+                    </div>
+                    <span class="control-status status-not-started">Not Started</span>
+                </div>
+                <div class="control-item">
+                    <input type="checkbox" class="control-check" onchange="updateProgress()">
+                    <div class="control-info">
+                        <div class="control-id">SC-12</div>
+                        <div class="control-name">Cryptographic Key Establishment and Management</div>
+                    </div>
+                    <span class="control-status status-not-started">Not Started</span>
+                </div>
+                <div class="control-item">
+                    <input type="checkbox" class="control-check" onchange="updateProgress()">
+                    <div class="control-info">
+                        <div class="control-id">SC-28</div>
+                        <div class="control-name">Protection of Information at Rest</div>
+                    </div>
+                    <span class="control-status status-not-started">Not Started</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="export-section">
+            <h3>Export Progress Report</h3>
+            <p style="color: var(--muted); margin: 0.5rem 0 1rem;">Download current implementation status for client review</p>
+            <button class="btn btn-success" onclick="exportReport()">📥 Export to PDF</button>
+        </div>
+    </div>
+
+    <script>
+        function toggleDomain(header) {
+            const content = header.nextElementSibling;
+            content.classList.toggle('active');
+        }
+
+        function updateProgress() {
+            const checkboxes = document.querySelectorAll('.control-check');
+            const checked = document.querySelectorAll('.control-check:checked');
+            const total = checkboxes.length;
+            const complete = checked.length;
+            const percentage = Math.round((complete / total) * 100);
+
+            document.getElementById('overallProgress').textContent = percentage + '%';
+            document.getElementById('controlsComplete').textContent = complete + '/' + total;
+
+            // Update domain progress bars
+            document.querySelectorAll('.domain-section').forEach(domain => {
+                const domainChecks = domain.querySelectorAll('.control-check');
+                const domainChecked = domain.querySelectorAll('.control-check:checked');
+                const domainProgress = Math.round((domainChecked.length / domainChecks.length) * 100);
+                
+                const fill = domain.querySelector('.progress-fill');
+                const text = domain.querySelector('.progress-text');
+                
+                if (fill) fill.style.width = domainProgress + '%';
+                if (text) text.textContent = domainChecked.length + '/' + domainChecks.length;
+            });
+
+            // Update status labels
+            document.querySelectorAll('.control-item').forEach(item => {
+                const checkbox = item.querySelector('.control-check');
+                const status = item.querySelector('.control-status');
+                
+                if (checkbox.checked) {
+                    status.textContent = 'Complete';
+                    status.className = 'control-status status-complete';
+                } else {
+                    status.textContent = 'Not Started';
+                    status.className = 'control-status status-not-started';
+                }
+            });
+        }
+
+        function exportReport() {
+            alert('Report export functionality would generate PDF here.\n\nCurrent Status:\n' + 
+                  document.getElementById('controlsComplete').textContent + ' controls complete\n' +
+                  document.getElementById('overallProgress').textContent + ' overall progress');
+        }
+
+        // Initialize
+        updateProgress();
+    </script>
+</body>
+</html>
